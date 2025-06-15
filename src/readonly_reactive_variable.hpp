@@ -16,7 +16,7 @@ public:
     readonly_reactive_variable<T> &to_readonly_reactive_variable() const { return &this; }
 
 protected:
-    virtual void on_value_changed(T &value) {
+    virtual void on_value_changed(const T &value) {
     }
 
     virtual void on_receive_error(std::runtime_error &exception) {

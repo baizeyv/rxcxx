@@ -6,7 +6,6 @@
 #define OBSERVER_NODE_H
 #include "abs_observer.hpp"
 #include "disposable.h"
-#include "observer_node_parent.hpp"
 
 template<class T>
 class observer_node<T> final : disposable {
