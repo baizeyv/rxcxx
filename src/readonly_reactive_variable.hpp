@@ -9,7 +9,7 @@
 template<class T>
 class readonly_reactive_variable : public abs_observable<T>, public disposable {
 public:
-    virtual T &current_value() = 0;
+    virtual T &value() = 0;
 
     virtual void dispose() override = 0;
 

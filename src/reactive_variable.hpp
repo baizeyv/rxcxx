@@ -10,6 +10,7 @@
 #include "readonly_reactive_variable.hpp"
 #include "subject.hpp"
 
+// ! 若T为自定义类型,推荐重载==
 template<class T>
 class reactive_variable : public readonly_reactive_variable<T>, protected subject<T>, protected observer_node_parent<T> {
 private:
@@ -38,14 +39,15 @@ public:
     }
 
 
-    T &current_value() override {
+    T &value() override {
         return current;
     }
 
-    explicit reactive_variable(T &value): complete_state(0), error(std::runtime_error("")) {
+    template<typename U>
+    explicit reactive_variable(U &&value): complete_state(0), error(std::runtime_error("")) {
         subscribe_with_init = false;
         reactive_variable<T>::on_value_changing(value);
-        current = value;
+        current = std::forward<U>(value);
         reactive_variable<T>::on_value_changed(value);
     }
 

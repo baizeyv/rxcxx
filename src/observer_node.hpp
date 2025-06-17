@@ -6,26 +6,26 @@
 #define OBSERVER_NODE_H
 #include "abs_observer.hpp"
 #include "disposable.h"
-template<class  T>
+template<class T>
 class observer_node_parent;
 
-template <class T>
+template<class T>
 class observer_node : public disposable {
 public:
-    abs_observer<T>* observer = nullptr;
+    abs_observer<T> *observer = nullptr;
 
-    observer_node_parent<T>* parent = nullptr;
+    observer_node_parent<T> *parent = nullptr;
 
-    observer_node<T>* previous = nullptr;
+    observer_node<T> *previous = nullptr;
 
-    observer_node<T>* next = nullptr;
+    observer_node<T> *next = nullptr;
 
-    observer_node(observer_node_parent<T>* parent, abs_observer<T>* observer) : observer(observer), parent(parent) {
+    observer_node(observer_node_parent<T> *parent, abs_observer<T> *observer) : observer(observer), parent(parent) {
         if (parent->root == nullptr) {
             // # 设置根节点
             parent->root = this;
         } else {
-            observer_node<T>* prev;
+            observer_node<T> *prev;
             if (parent->root->previous == nullptr) {
                 prev = parent->root;
             } else {
@@ -38,19 +38,21 @@ public:
     }
 
     void dispose() override {
-        // TODO: delete所有new出的对象
-        if (parent == nullptr)
+        if (parent == nullptr) {
+            delete this;
             return;
+        }
 
-        if (parent->is_completed_or_disposed())
+        if (parent->is_completed_or_disposed()) {
             // # 已经完成或终结了
             return;
+        }
         if (parent->root == this) {
             // # 这是根节点
             if (previous == nullptr || next == nullptr) {
                 parent->root = nullptr;
             } else {
-                observer_node<T>* root = next;
+                observer_node<T> *root = next;
                 if (root->next == nullptr)
                     root->previous = nullptr;
                 else
@@ -67,8 +69,8 @@ public:
                 parent->root->previous = previous;
         }
         parent = nullptr;
+        delete this;
     }
-
 };
 
 #endif //OBSERVER_NODE_H

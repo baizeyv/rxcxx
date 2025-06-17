@@ -8,6 +8,8 @@
 
 class empty_disposable final : public disposable {
 public:
-    void dispose() override {};
+    void dispose() override {
+        delete this;
+    };
 };
 #endif //EMPTY_DISPOSABLE_H

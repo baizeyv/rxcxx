@@ -6,13 +6,21 @@
 int main() {
     int a = 0;
     reactive_variable<int> test(a);
-    test.subscribe([](const int& val) {
+    // reactive_variable<int> test(5);
+    const auto ptr = test.subscribe([](const int& val) {
         std::cout << val << " ??" << std::endl;
+    });
+    const auto ptr2 = test.subscribe([](const int& val) {
+        std::cout << val << " !!" << std::endl;
     });
     test = 5;
     test = 5;
     test = 7;
-    test = 4;
-    test = 4;
-    test = 5;
+    test.dispose();
+    // test = 4;
+    ptr->dispose();
+
+    // test = 4;
+    // test = 5;
+    // ptr2->dispose();
 }
