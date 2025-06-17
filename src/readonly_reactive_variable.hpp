@@ -7,7 +7,7 @@
 #include "abs_observable.hpp"
 
 template<class T>
-class readonly_reactive_variable : abs_observable<T>, disposable {
+class readonly_reactive_variable : public abs_observable<T>, public disposable {
 public:
     virtual T &current_value() = 0;
 

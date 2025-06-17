@@ -12,7 +12,7 @@ result::result() : exception(std::runtime_error("SUCCESS")), is_success(true) {
 result::result(std::runtime_error exception) : exception(std::move(exception)), is_success(false) {
 }
 
-std::runtime_error result::get_exception() const {
+std::runtime_error& result::get_exception() {
     return exception;
 }
 
@@ -22,4 +22,12 @@ result * result::Success() {
 
 result * result::Failure(std::runtime_error exception) {
     return new result(std::move(exception));
+}
+
+std::ostream &operator<<(std::ostream &os, result &r) {
+    if (!r.is_success)
+        os << "Failure {" << r.get_exception().what() << "}" << std::endl;
+    else
+        os << "Success" << std::endl;
+    return os;
 }

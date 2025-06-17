@@ -14,7 +14,7 @@
  * @tparam T
  */
 template<class T>
-class subject<T> {
+class subject {
 public:
     virtual void on_next(T& value) = 0;
     virtual void on_error(std::runtime_error &error) = 0;

@@ -6,11 +6,13 @@
 #define OBSERVER_NODE_H
 #include "abs_observer.hpp"
 #include "disposable.h"
+template<class  T>
+class observer_node_parent;
 
-template<class T>
-class observer_node<T> final : disposable {
+template <class T>
+class observer_node : public disposable {
 public:
-    const abs_observer<T>* observer = nullptr;
+    abs_observer<T>* observer = nullptr;
 
     observer_node_parent<T>* parent = nullptr;
 
@@ -18,7 +20,7 @@ public:
 
     observer_node<T>* next = nullptr;
 
-    observer_node(observer_node_parent<T>* parent, const abs_observer<T>* observer) : observer(observer), parent(parent) {
+    observer_node(observer_node_parent<T>* parent, abs_observer<T>* observer) : observer(observer), parent(parent) {
         if (parent->root == nullptr) {
             // # 设置根节点
             parent->root = this;

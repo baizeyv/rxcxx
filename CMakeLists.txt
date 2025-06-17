@@ -21,4 +21,5 @@ add_executable(rxcxx main.cpp
         src/observer_node_parent.hpp
         src/readonly_reactive_variable.hpp
         src/reactive_variable.hpp
-        src/subject.hpp)
+        src/subject.hpp
+        src/anonymous_observer.hpp)

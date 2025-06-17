@@ -7,8 +7,9 @@
 #include "observer_node.hpp"
 
 template<class T>
-class observer_node_parent<T> final {
-protected:
+class observer_node_parent {
+
+public:
     observer_node<T> *root = nullptr;
 
     virtual bool is_completed_or_disposed() const = 0;

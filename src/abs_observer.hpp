@@ -18,11 +18,12 @@ private:
      */
     bool is_called_on_complete = false;
 
-protected:
+public:
     /**
      * * 订阅来源
      */
     single_assignment_disposable source_subscription;
+protected:
 
     virtual bool auto_dispose_on_complete() {
         return true;
@@ -71,7 +72,8 @@ public:
         } catch (std::runtime_error &e) {
             on_error(e);
         } catch (...) {
-            on_error(std::runtime_error("Unknown Exception!"));
+            auto e = std::runtime_error("Unknown Exception!");
+            on_error(e);
         }
     }
 

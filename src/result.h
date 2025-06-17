@@ -19,7 +19,7 @@ public:
 
     explicit result(std::runtime_error exception);
 
-    std::runtime_error get_exception() const;
+    std::runtime_error& get_exception() ;
 
     static result *Success();
 
@@ -27,13 +27,6 @@ public:
 
 };
 
-std::ostream &operator<<(std::ostream &os, const result &r) {
-    if (!r.is_success)
-        os << "Failure {" << r.get_exception().what() << "}" << std::endl;
-    else
-        os << "Success" << std::endl;
-    return os;
-}
 
 
 #endif //RESULT_H

@@ -5,6 +5,7 @@
 #ifndef ABS_OBSERVABLE_H
 #define ABS_OBSERVABLE_H
 #include "abs_observer.hpp"
+#include "anonymous_observer.hpp"
 #include "disposable.h"
 
 /**
@@ -23,6 +24,12 @@ public:
             observer->dispose();
             throw;
         }
+    }
+
+    disposable* subscribe(std::function<void(T&)> on_next) {
+        auto observer = new anonymous_observer<T>(on_next, stubs::unhandled_exception, stubs::handle_result);
+        abs_observer<T>* ptr = static_cast<abs_observer<T>*>(observer);
+        return this->subscribe(ptr);
     }
 protected:
     virtual disposable* subscribe_core(abs_observer<T> *observer) = 0;
