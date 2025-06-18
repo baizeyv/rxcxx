@@ -12,7 +12,8 @@
 
 // ! 若T为自定义类型,推荐重载==
 template<class T>
-class reactive_variable : public readonly_reactive_variable<T>, protected subject<T>, protected observer_node_parent<T> {
+class reactive_variable : public readonly_reactive_variable<T>, protected subject<T>,
+                          protected observer_node_parent<T> {
 private:
     T current;
 
@@ -51,20 +52,23 @@ public:
         reactive_variable<T>::on_value_changed(value);
     }
 
-    reactive_variable(T &value, bool subscribe_with_init) : subscribe_with_init(subscribe_with_init), complete_state(0),
-                                                            error(std::runtime_error("")) {
+    template<typename U>
+    reactive_variable(U &&value, const bool subscribe_with_init) : subscribe_with_init(subscribe_with_init),
+                                                                   complete_state(0),
+                                                                   error(std::runtime_error("")) {
         reactive_variable<T>::on_value_changing(value);
-        current = value;
+        current = std::forward<U>(value);
         reactive_variable<T>::on_value_changed(value);
     }
 
+    template<typename U>
     reactive_variable
-    (T &value, const bool call_on_value_changing_in_constructor,
+    (U &&value, const bool call_on_value_changing_in_constructor,
      const bool subscribe_with_init) : subscribe_with_init(subscribe_with_init),
                                        complete_state(0), error(std::runtime_error("")) {
         if (call_on_value_changing_in_constructor)
             reactive_variable<T>::on_value_changing(value);
-        current = value;
+        current = std::forward<U>(value);
         if (call_on_value_changing_in_constructor)
             reactive_variable<T>::on_value_changed(value);
     }
@@ -74,7 +78,7 @@ public:
      * @param v
      * @return
      */
-    reactive_variable &operator=(T&& v) {
+    reactive_variable &operator=(T &&v) {
         on_value_changing(v);
         if (current == v)
             return *this;
@@ -152,7 +156,6 @@ public:
     }
 
     void dispose(const bool call_on_completed) {
-        // TODO: delete new 出的对象指针
         observer_node<T> *node = nullptr;
         if (complete_state == 3) // # disposed
         {
