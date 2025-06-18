@@ -64,6 +64,16 @@ public:
         }
     }
 
+    void on_complete_without_result() {
+        if (is_called_on_complete)
+            return;
+        is_called_on_complete = true;
+        if (is_disposed)
+            return;
+        if (auto_dispose_on_complete())
+            dispose();
+    }
+
     void on_next(T &p_value) {
         if (is_disposed || is_called_on_complete)
             return;
@@ -96,7 +106,6 @@ public:
         is_disposed = true;
         dispose_core();
         source_subscription.dispose();
-        std::cout << "DELETE -> disposable(abs observer) " << this << std::endl;
         delete this;
     }
 };

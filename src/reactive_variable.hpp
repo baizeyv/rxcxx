@@ -31,6 +31,11 @@ private:
     }
 
 public:
+
+    ~reactive_variable() {
+        dispose(false);
+    }
+
     bool is_completed() const {
         return complete_state == 1 || complete_state == 2;
     }
@@ -92,7 +97,6 @@ public:
         dispose(true);
     }
 
-
     bool is_completed_or_disposed() const override {
         return is_completed() || is_disposed();
     }
@@ -150,7 +154,6 @@ public:
                 return;
             auto tmp = node;
             node = node->next;
-            std::cout << "DELETE -> disposable(observer node) " << tmp << std::endl;
             delete tmp;
         }
     }
@@ -161,7 +164,7 @@ public:
         {
             return;
         }
-        if (call_on_completed && !is_completed()) {
+        if (!is_completed()) {
             node = this->root;
         }
         this->root = nullptr;
@@ -169,7 +172,10 @@ public:
         while (node) {
             // # 因为调用on_complete时会把node给delete掉,所以在delete前先存储上node->next
             auto next_ptr = node->next;
-            node->observer->on_complete(result::Success());
+            if (call_on_completed)
+                node->observer->on_complete(result::Success());
+            else
+                node->observer->on_complete_without_result();
             node = next_ptr;
         }
         dispose_core();
@@ -189,17 +195,13 @@ protected:
                     observer->on_next(current);
             }
             observer->on_complete(completed_result);
-            const auto tmp = new empty_disposable();;
-            std::cout << "NEW -> disposable(empty) " << tmp << std::endl;
-            return tmp;
+            return new empty_disposable();
         }
 
         if (subscribe_with_init)
             observer->on_next(current);
 
-        const auto tmp = new observer_node<T>(this, observer);;
-        std::cout << "NEW -> disposable(observer_node) " << tmp << std::endl;
-        return tmp;
+        return new observer_node<T>(this, observer);
     }
 
     virtual void on_value_changing(T &value) {

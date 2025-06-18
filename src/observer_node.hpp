@@ -39,14 +39,12 @@ public:
 
     void dispose() override {
         if (parent == nullptr) {
-            std::cout << "DELETE -> disposable(observer node) " << this << std::endl;
             delete this;
             return;
         }
 
         if (parent->is_completed_or_disposed()) {
             // # 已经完成或终结了
-            std::cout << "DELETE -> disposable(observer node) " << this << std::endl;
             delete this;
             return;
         }
@@ -72,7 +70,6 @@ public:
                 parent->root->previous = previous;
         }
         parent = nullptr;
-        std::cout << "DELETE -> disposable(observer node) " << this << std::endl;
         delete this;
     }
 };

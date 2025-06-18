@@ -30,7 +30,6 @@ public:
 
     disposable* subscribe(std::function<void(T&)> on_next) {
         auto observer = new anonymous_observer<T>(on_next, stubs::unhandled_exception, stubs::handle_result);
-        std::cout << "NEW -> disposable(anonymous observer) " << observer << std::endl;
         // ! 这里的observer是new出来的,需要在合适的时机delete
         abs_observer<T>* ptr = static_cast<abs_observer<T>*>(observer);
         return this->subscribe(ptr);

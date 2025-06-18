@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "src/memleak.h"
+// #include "src/memleak.h"
 #include "src/reactive_variable.hpp"
 
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
