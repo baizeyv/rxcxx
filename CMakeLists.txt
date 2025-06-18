@@ -25,4 +25,7 @@ add_executable(rxcxx main.cpp
         src/base/anonymous_observer.hpp
         src/memleak.h
         src/event/simple_event.hpp
+        src/base/unit.cpp
+        src/base/unit.h
+        src/event/simple_message.h
 )

@@ -27,6 +27,7 @@ public:
 
 };
 
+std::ostream &operator<<(std::ostream &os, result &r);
 
 
 #endif //RESULT_H

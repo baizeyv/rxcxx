@@ -2,6 +2,7 @@
 
 // #include "src/memleak.h"
 #include "src/event/simple_event.hpp"
+#include "src/event/simple_message.h"
 #include "src/variable/reactive_variable.hpp"
 
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -33,4 +34,10 @@ int main() {
     int xx = 9;
     evtPtr->dispose();
     evt.fire(xx);
+
+    simple_message msg;
+    const auto msgPtr = msg.subscribe([](const unit& val) {
+        std::cout << val << " ##" << std::endl;
+    });
+    msg.fire();
 }
