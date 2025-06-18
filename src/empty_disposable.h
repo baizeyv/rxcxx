@@ -9,6 +9,7 @@
 class empty_disposable final : public disposable {
 public:
     void dispose() override {
+        std::cout << "DELETE -> disposable(empty) " << this << std::endl;
         delete this;
     };
 };

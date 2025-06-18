@@ -4,6 +4,7 @@
 
 #include "single_assignment_disposable.h"
 
+#include <iostream>
 #include <stdexcept>
 
 #include "disposed_sentinel.h"
@@ -13,6 +14,7 @@ void single_assignment_disposable::throw_already_assignment() {
 }
 
 void single_assignment_disposable::set_disposable(disposable *disposable) {
+    // ! 这里传入的disposable指针是new出来的,需要在合适的时候delete
     if (is_set) {
         throw_already_assignment();
         return;
@@ -20,7 +22,7 @@ void single_assignment_disposable::set_disposable(disposable *disposable) {
     is_set = true;
     if (current == disposed_sentinel::instance()) {
         disposable->dispose();
-        delete disposable;
+        // ! dispose中调用了delete,已经delete了这个disposable了
     } else {
         current = disposable;
     }
@@ -31,6 +33,6 @@ void single_assignment_disposable::dispose() {
         return;
     }
     current->dispose();
-    delete current;
+    // ! dispose中调用了delete,已经delete了这个current了
     current = disposed_sentinel::instance();
 }

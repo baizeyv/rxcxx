@@ -96,6 +96,8 @@ public:
         is_disposed = true;
         dispose_core();
         source_subscription.dispose();
+        std::cout << "DELETE -> disposable(abs observer) " << this << std::endl;
+        delete this;
     }
 };
 #endif //ABS_OBSERVER_H

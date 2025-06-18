@@ -17,11 +17,15 @@ std::runtime_error& result::get_exception() {
 }
 
 result * result::Success() {
-    return new result();
+    const auto tmp = new result();
+    std::cout << "NEW -> result(success) " << tmp << std::endl;
+    return tmp;
 }
 
 result * result::Failure(std::runtime_error exception) {
-    return new result(std::move(exception));
+    const auto tmp = new result(std::move(exception));
+    std::cout << "NEW -> result(failure) " << tmp << std::endl;
+    return tmp;
 }
 
 std::ostream &operator<<(std::ostream &os, result &r) {

@@ -1,7 +1,7 @@
 ﻿cmake_minimum_required(VERSION 3.31)
 project(rxcxx)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
 add_executable(rxcxx main.cpp
         src/disposable.h
@@ -22,4 +22,6 @@ add_executable(rxcxx main.cpp
         src/readonly_reactive_variable.hpp
         src/reactive_variable.hpp
         src/subject.hpp
-        src/anonymous_observer.hpp)
+        src/anonymous_observer.hpp
+        src/memleak.h
+)

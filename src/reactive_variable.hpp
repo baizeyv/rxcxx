@@ -146,6 +146,7 @@ public:
                 return;
             auto tmp = node;
             node = node->next;
+            std::cout << "DELETE -> disposable(observer node) " << tmp << std::endl;
             delete tmp;
         }
     }
@@ -162,15 +163,18 @@ public:
         }
         this->root = nullptr;
         complete_state = 3;
-        while (node != nullptr) {
+        while (node) {
+            // # 因为调用on_complete时会把node给delete掉,所以在delete前先存储上node->next
+            auto next_ptr = node->next;
             node->observer->on_complete(result::Success());
-            node = node->next;
+            node = next_ptr;
         }
         dispose_core();
     }
 
 protected:
     disposable *subscribe_core(abs_observer<T> *observer) override {
+        // ! 这里传入的observer指针是new出来的,需要在合适的时候delete
         throw_if_disposed();
         result *completed_result = nullptr;
         if (is_completed()) {
@@ -182,13 +186,17 @@ protected:
                     observer->on_next(current);
             }
             observer->on_complete(completed_result);
-            return new empty_disposable();
+            const auto tmp = new empty_disposable();;
+            std::cout << "NEW -> disposable(empty) " << tmp << std::endl;
+            return tmp;
         }
 
         if (subscribe_with_init)
             observer->on_next(current);
 
-        return new observer_node<T>(this, observer);
+        const auto tmp = new observer_node<T>(this, observer);;
+        std::cout << "NEW -> disposable(observer_node) " << tmp << std::endl;
+        return tmp;
     }
 
     virtual void on_value_changing(T &value) {
