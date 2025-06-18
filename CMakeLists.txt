@@ -4,24 +4,25 @@ project(rxcxx)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(rxcxx main.cpp
-        src/disposable.h
-        src/abs_observable.hpp
-        src/abs_observer.hpp
-        src/single_assignment_disposable.cpp
-        src/single_assignment_disposable.h
-        src/disposed_sentinel.cpp
-        src/disposed_sentinel.h
-        src/empty_disposable.h
-        src/result.cpp
-        src/result.h
-        src/Stubs.h
-        src/scope_guard.cpp
-        src/scope_guard.h
-        src/observer_node.hpp
-        src/observer_node_parent.hpp
-        src/readonly_reactive_variable.hpp
-        src/reactive_variable.hpp
-        src/subject.hpp
-        src/anonymous_observer.hpp
+        src/base/disposable.h
+        src/base/abs_observable.hpp
+        src/base/abs_observer.hpp
+        src/base/single_assignment_disposable.cpp
+        src/base/single_assignment_disposable.h
+        src/base/disposed_sentinel.cpp
+        src/base/disposed_sentinel.h
+        src/base/empty_disposable.h
+        src/base/result.cpp
+        src/base/result.h
+        src/base/stubs.h
+        src/base/scope_guard.cpp
+        src/base/scope_guard.h
+        src/base/observer_node.hpp
+        src/base/observer_node_parent.hpp
+        src/variable/readonly_reactive_variable.hpp
+        src/variable/reactive_variable.hpp
+        src/base/subject.hpp
+        src/base/anonymous_observer.hpp
         src/memleak.h
+        src/event/simple_event.hpp
 )

@@ -5,10 +5,10 @@
 #ifndef REACTIVE_VARIABLE_H
 #define REACTIVE_VARIABLE_H
 
-#include "empty_disposable.h"
-#include "observer_node_parent.hpp"
+#include "../base/empty_disposable.h"
+#include "../base/observer_node_parent.hpp"
 #include "readonly_reactive_variable.hpp"
-#include "subject.hpp"
+#include "../base/subject.hpp"
 
 // ! 若T为自定义类型,推荐重载==
 template<class T>
@@ -144,7 +144,7 @@ public:
         if (!rst->is_success) {
             this->on_receive_error(rst->get_exception());
         }
-        observer_node<T> *last;
+        observer_node<T> *last = nullptr;
         if (node != nullptr) {
             last = node->previous;
         }

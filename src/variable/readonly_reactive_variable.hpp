@@ -4,7 +4,7 @@
 
 #ifndef READONLY_REACTIVE_VARIABLE_H
 #define READONLY_REACTIVE_VARIABLE_H
-#include "abs_observable.hpp"
+#include "../base/abs_observable.hpp"
 
 template<class T>
 class readonly_reactive_variable : public abs_observable<T>, public disposable {

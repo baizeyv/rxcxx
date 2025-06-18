@@ -1,7 +1,8 @@
 #include <iostream>
 
 // #include "src/memleak.h"
-#include "src/reactive_variable.hpp"
+#include "src/event/simple_event.hpp"
+#include "src/variable/reactive_variable.hpp"
 
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 int main() {
@@ -24,10 +25,12 @@ int main() {
     test = 7;
     //ptr->dispose();
     test.dispose(); // # 在这个dispose后,ptr指向的对象会被delete,之后不能再使用ptr了,悬空指针了
-    // test = 4;
-    // ptr->dispose();
 
-    // test = 4;
-    // test = 5;
-    // ptr2->dispose();
+    simple_event<int> evt;
+    const auto evtPtr = evt.subscribe([](const int& val) {
+        std::cout << val << " ##" << std::endl;
+    });
+    int xx = 9;
+    evtPtr->dispose();
+    evt.fire(xx);
 }
