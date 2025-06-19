@@ -9,7 +9,8 @@
 class empty_disposable final : public disposable {
 public:
     void dispose() override {
-        delete this;
+        // delete this;
+        TD(this);
     };
 };
 #endif //EMPTY_DISPOSABLE_H

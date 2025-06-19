@@ -37,6 +37,8 @@ add_executable(rxcxx main.cpp
         src/event/string_message.cpp
         src/event/string_message.h
         src/event/basic_message.h
-        src/operator/skip.h
+        src/operator/skip.hpp
         src/operator/operator_factory.h
+        src/operator/take.hpp
+        src/utils.h
 )

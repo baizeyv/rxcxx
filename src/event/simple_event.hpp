@@ -10,7 +10,7 @@
 #include "../base/subject.hpp"
 
 template<class T>
-class simple_event : public abs_observable<T>, public disposable, protected subject<T>, protected observer_node_parent<T>{
+class simple_event : public abs_observable<T>, public disposable, protected subject<T>, public observer_node_parent<T>{
 
 private:
     T current;
@@ -128,7 +128,8 @@ public:
                 return;
             auto tmp = node;
             node = node->next;
-            delete tmp;
+            TD(tmp);
+            // delete tmp;
         }
     }
 
@@ -172,9 +173,11 @@ protected:
                 observer->on_next(current);
             }
             observer->on_complete(completed_result);
-            return new empty_disposable();
+            return tracked_new<empty_disposable>();
+            // return new empty_disposable();
         }
-        return new observer_node<T>(this, observer);
+        return tracked_new<observer_node<T>>(this, observer);
+        // return new observer_node<T>(this, observer);
     }
 };
 

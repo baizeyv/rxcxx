@@ -4,7 +4,9 @@
 
 #ifndef OPERATOR_FACTORY_H
 #define OPERATOR_FACTORY_H
-#include "skip.h"
+#include "skip.hpp"
+#include "take.hpp"
+#include "../utils.h"
 #include "../base/abs_observable.hpp"
 
 class operator_factory final {
@@ -27,7 +29,17 @@ public:
     template<typename T>
     static abs_observable<T> *make_skip(abs_observable<T> *observable, const int count) {
         if (count >= 0) {
-            return new skip<T>(observable, count);
+            return tracked_new<skip<T>>(observable, count);
+            // return new skip<T>(observable, count);
+        }
+        throw std::runtime_error("argument out of range -> count");
+    }
+
+    template<typename T>
+    static abs_observable<T> *make_take(abs_observable<T> *observable, const int count) {
+        if (count >= 0) {
+            return tracked_new<take<T>>(observable, count);
+            // return new take<T>(observable, count);
         }
         throw std::runtime_error("argument out of range -> count");
     }

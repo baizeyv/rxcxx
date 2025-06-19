@@ -39,13 +39,15 @@ public:
 
     void dispose() override {
         if (parent == nullptr) {
-            delete this;
+            // delete this;
+            TD(this);
             return;
         }
 
         if (parent->is_completed_or_disposed()) {
             // # 已经完成或终结了
-            delete this;
+            // delete this;
+            TD(this);
             return;
         }
         if (parent->root == this) {
@@ -70,7 +72,8 @@ public:
                 parent->root->previous = previous;
         }
         parent = nullptr;
-        delete this;
+        // delete this;
+        TD(this);
     }
 };
 

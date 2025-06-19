@@ -4,6 +4,8 @@
 
 #include "stubs.h"
 
+#include "../utils.h"
+
 std::function<void(std::runtime_error &)> stubs::unhandled_exception = [](const std::runtime_error &ex) {
     // TODO: GODOT LOG
     std::cout << "RX UnhandledException: " << ex.what() << std::endl;
@@ -17,6 +19,7 @@ std::function<void(result *)> stubs::handle_result = [](result *rst) {
         auto ex = rst->get_exception();
         unhandled_exception(ex);
     }
-    delete rst;
+    // delete rst;
+    TD(rst);
 };
 

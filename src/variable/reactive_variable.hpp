@@ -13,7 +13,7 @@
 // ! 若T为自定义类型,推荐重载==
 template<class T>
 class reactive_variable : public readonly_reactive_variable<T>, protected subject<T>,
-                          protected observer_node_parent<T> {
+                          public observer_node_parent<T> {
 private:
     T current;
 
@@ -154,7 +154,8 @@ public:
                 return;
             auto tmp = node;
             node = node->next;
-            delete tmp;
+            // delete tmp;
+            TD(tmp);
         }
     }
 
@@ -195,13 +196,15 @@ protected:
                     observer->on_next(current);
             }
             observer->on_complete(completed_result);
-            return new empty_disposable();
+            // return new empty_disposable();
+            return tracked_new<empty_disposable>();
         }
 
         if (subscribe_with_init)
             observer->on_next(current);
 
-        return new observer_node<T>(this, observer);
+        return tracked_new<observer_node<T>>(this, observer);
+        // return new observer_node<T>(this, observer);
     }
 
     virtual void on_value_changing(T &value) {

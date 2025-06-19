@@ -9,6 +9,7 @@
 #include "scope_guard.h"
 #include "single_assignment_disposable.h"
 #include "stubs.h"
+#include "../utils.h"
 
 template<class T>
 class abs_observer : public disposable {
@@ -105,7 +106,8 @@ public:
         is_disposed = true;
         dispose_core();
         source_subscription.dispose();
-        delete this;
+        TD(this);
+        // delete this;
     }
 };
 #endif //ABS_OBSERVER_H

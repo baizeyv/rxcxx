@@ -18,7 +18,8 @@ class abs_observable {
 public:
     virtual ~abs_observable() {
         for (size_t i = 0; i < operator_pointers.size(); ++i) {
-            delete operator_pointers[i];
+            TD(operator_pointers[i]);
+            // delete operator_pointers[i];
         }
         operator_pointers.clear();
     }
@@ -37,7 +38,8 @@ public:
     }
 
     disposable* subscribe(std::function<void(T&)> on_next) {
-        auto observer = new anonymous_observer<T>(on_next, stubs::unhandled_exception, stubs::handle_result);
+        // auto observer = new anonymous_observer<T>(on_next, stubs::unhandled_exception, stubs::handle_result);
+        auto observer = tracked_new<anonymous_observer<T>>(on_next, stubs::unhandled_exception, stubs::handle_result);
         // ! 这里的observer是new出来的,需要在合适的时机delete
         abs_observer<T>* ptr = static_cast<abs_observer<T>*>(observer);
         return this->subscribe(ptr);
@@ -45,6 +47,12 @@ public:
 
     abs_observable<T>* skip(const int count) {
         const auto pointer = operator_factory::make_skip<T>(this, count);
+        operator_pointers.push_back(pointer);
+        return pointer;
+    }
+
+    abs_observable<T>* take(const int count) {
+        const auto pointer = operator_factory::make_take<T>(this, count);
         operator_pointers.push_back(pointer);
         return pointer;
     }

@@ -75,16 +75,20 @@ int main() {
 
     int a = 0;
     reactive_variable<int> test(a);
-    const auto ptr = test.skip(2)->skip(4)->subscribe([](const int& val) {
+    // const auto ptr = test.skip(2)->skip(4)->subscribe([](const int& val) {
+    //     std::cout << val << " ??" << std::endl;
+    // });
+    const auto ptr = test.take(2)->subscribe([](const int& val) {
         std::cout << val << " ??" << std::endl;
     });
     test = 3;
-    test = 5;
-    test = 7;
-    test = 9;
-    test = 99;
-    test = 88;
-    test = 77;
-    test = 66;
+    // ptr->dispose();
+    // test = 5;
+    // test = 7;
+    // test = 9;
+    // test = 99;
+    // test = 88;
+    // test = 77;
+    // test = 66;
     // test.dispose();
 }

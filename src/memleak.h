@@ -392,7 +392,7 @@ namespace _overload_std{
 void *operator new(size_t size){
 	if(size==0)size=1;
 	void *result=malloc(size);
-	std::cout << "MALLOC ADDRESS -> " << result << std::endl;
+	// std::cout << "MALLOC ADDRESS -> " << result << std::endl;
 	if(result==nullptr)
 		throw std::bad_alloc();
 	return result;
@@ -401,19 +401,19 @@ void *operator new[](size_t size){
 	return operator new(size);
 }
 void operator delete(void *mem) noexcept {
-	std::cout << "DELETE ADDRESS -> " << mem << std::endl;
+	// std::cout << "DELETE ADDRESS -> " << mem << std::endl;
 	free(mem);
 }
 void operator delete[](void *mem) noexcept {
-	std::cout << "DELETE ADDRESS -> " << mem << std::endl;
+	// std::cout << "DELETE ADDRESS -> " << mem << std::endl;
 	free(mem);
 }
 void operator delete(void *mem,size_t size) noexcept {
-	std::cout << "DELETE ADDRESS -> " << mem << std::endl;
+	// std::cout << "DELETE ADDRESS -> " << mem << std::endl;
 	free(mem);
 }
 void operator delete[](void *mem,size_t size) noexcept {
-	std::cout << "DELETE ADDRESS -> " << mem << std::endl;
+	// std::cout << "DELETE ADDRESS -> " << mem << std::endl;
 	free(mem);
 }
 #endif
