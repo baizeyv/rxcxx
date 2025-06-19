@@ -10,6 +10,8 @@
  */
 class disposable {
 public:
+    virtual ~disposable() = default;
+
     virtual void dispose() = 0;
 };
 

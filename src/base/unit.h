@@ -16,4 +16,13 @@ struct unit {
     bool operator>(const unit &other) const;
 };
 std::ostream &operator<<(std::ostream &os, const unit &r);
+
+namespace std {
+    template<>
+    struct hash<unit> {
+        std::size_t operator()(const unit& u) const noexcept {
+            return 0;
+        }
+    };
+}
 #endif //UNIT_H

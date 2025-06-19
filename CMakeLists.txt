@@ -32,4 +32,9 @@ add_executable(rxcxx main.cpp
         src/event/int_message.h
         src/event/int_message.cpp
         src/base/stubs.cpp
+        src/event/basic_event.hpp
+        src/event/string_event.hpp
+        src/event/string_message.cpp
+        src/event/string_message.h
+        src/event/basic_message.h
 )

@@ -305,6 +305,9 @@ namespace memleak{
 	void setup_mem(size_t size,size_t mcb_count,unsigned char initVal){
         setup_mem_noinit(size,mcb_count);
 		memset(_memleak::mem->memStart,initVal,size); // 初始化内存
+        std::cout << "-------------------------------" << std::endl;
+        std::cout << "| Begin Malloc Memory Address |" << std::endl;
+        std::cout << "-------------------------------" << std::endl;
     }
     void set_leak_detect(bool enabled){ // 设置是否启用退出时打印泄漏信息
         if(_memleak::mem==nullptr)

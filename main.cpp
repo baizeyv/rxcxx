@@ -5,6 +5,7 @@
 #include "src/event/int_message.h"
 #include "src/event/simple_event.hpp"
 #include "src/event/simple_message.h"
+#include "src/event/string_message.h"
 #include "src/variable/reactive_variable.hpp"
 
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -47,17 +48,28 @@ int main() {
     msg.fire();
     */
 
-    // int_event<int> iv;
-    // const auto ivPtr = iv.subscribe(1, [](const int& val) {
-    //     std::cout << val << " &&" << std::endl;
-    // });
-    // iv.fire(1, 9);
-    // iv.fire(1, 8);
+    /*
+    int_event<int> iv;
+    const auto ivPtr = iv.subscribe(1, [](const int& val) {
+        std::cout << val << " &&" << std::endl;
+    });
+    iv.fire(1, 9);
+    iv.fire(1, 8);
+    */
 
+    /*
     int_message im;
     const auto imPtr = im.subscribe(1, [](const unit& _) {
         std::cout << "ZZZZ" << std::endl;
     });
     im.fire(2);
     im.fire(1);
+    */
+
+    // string_message sm;
+    // const auto smPtr = sm.subscribe("hello", [](const unit& s) {
+    //     std::cout << "COME" << std::endl;
+    // });
+    // sm.fire("ZZ");
+    // sm.fire("hello");
 }
