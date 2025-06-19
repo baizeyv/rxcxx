@@ -7,6 +7,7 @@
 #include "skip.hpp"
 #include "skip_while.h"
 #include "take.hpp"
+#include "take_while.h"
 #include "where.hpp"
 #include "../utils.h"
 #include "../base/abs_observable.hpp"
@@ -54,6 +55,11 @@ public:
     template<typename T>
     static abs_observable<T> *make_skip_while(abs_observable<T> *observable, std::function<bool(T&)> func) {
         return tracked_new<skip_while<T>>(observable, func);
+    }
+
+    template<typename T>
+    static abs_observable<T> *make_take_while(abs_observable<T> *observable, std::function<bool(T&)> func) {
+        return tracked_new<take_while<T>>(observable, func);
     }
 };
 #endif //OPERATOR_FACTORY_H
