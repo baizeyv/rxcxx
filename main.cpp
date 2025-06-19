@@ -97,11 +97,14 @@ int main() {
     // })->subscribe([](const int& val) {
     //     std::cout << val << " ??" << std::endl;
     // });
-    const auto ptr = test.take_while([](const int& val) -> bool {
-        if (val < 8)
-            return true;
-        return false;
-    })->subscribe([](const int& val) {
+    // const auto ptr = test.take_while([](const int& val) -> bool {
+    //     if (val < 8)
+    //         return true;
+    //     return false;
+    // })->subscribe([](const int& val) {
+    //     std::cout << val << " ??" << std::endl;
+    // });
+    const auto ptr = test.distinct()->subscribe([](const int& val) {
         std::cout << val << " ??" << std::endl;
     });
     test = 3;

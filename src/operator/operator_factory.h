@@ -4,6 +4,7 @@
 
 #ifndef OPERATOR_FACTORY_H
 #define OPERATOR_FACTORY_H
+#include "distinct.h"
 #include "skip.hpp"
 #include "skip_while.h"
 #include "take.hpp"
@@ -60,6 +61,11 @@ public:
     template<typename T>
     static abs_observable<T> *make_take_while(abs_observable<T> *observable, std::function<bool(T&)> func) {
         return tracked_new<take_while<T>>(observable, func);
+    }
+
+    template<typename T>
+    static abs_observable<T> *make_distinct(abs_observable<T> *observable) {
+        return tracked_new<distinct<T>>(observable);
     }
 };
 #endif //OPERATOR_FACTORY_H

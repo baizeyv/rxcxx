@@ -75,6 +75,12 @@ public:
         return pointer;
     }
 
+    abs_observable<T>* distinct() {
+        const auto pointer = operator_factory::make_distinct<T>(this);
+        operator_pointers.push_back(pointer);
+        return pointer;
+    }
+
 protected:
 
     std::vector<abs_observable<T>*> operator_pointers;
