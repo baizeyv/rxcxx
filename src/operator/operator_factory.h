@@ -6,6 +6,7 @@
 #define OPERATOR_FACTORY_H
 #include "skip.hpp"
 #include "take.hpp"
+#include "where.hpp"
 #include "../utils.h"
 #include "../base/abs_observable.hpp"
 
@@ -42,6 +43,11 @@ public:
             // return new take<T>(observable, count);
         }
         throw std::runtime_error("argument out of range -> count");
+    }
+
+    template<typename T>
+    static abs_observable<T> *make_where(abs_observable<T> *observable, std::function<bool(T&)> func) {
+        return tracked_new<where<T>>(observable, func);
     }
 };
 #endif //OPERATOR_FACTORY_H

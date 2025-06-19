@@ -41,4 +41,5 @@ add_executable(rxcxx main.cpp
         src/operator/operator_factory.h
         src/operator/take.hpp
         src/utils.h
+        src/operator/where.hpp
 )
