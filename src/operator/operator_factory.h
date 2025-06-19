@@ -5,6 +5,7 @@
 #ifndef OPERATOR_FACTORY_H
 #define OPERATOR_FACTORY_H
 #include "skip.hpp"
+#include "skip_while.h"
 #include "take.hpp"
 #include "where.hpp"
 #include "../utils.h"
@@ -48,6 +49,11 @@ public:
     template<typename T>
     static abs_observable<T> *make_where(abs_observable<T> *observable, std::function<bool(T&)> func) {
         return tracked_new<where<T>>(observable, func);
+    }
+
+    template<typename T>
+    static abs_observable<T> *make_skip_while(abs_observable<T> *observable, std::function<bool(T&)> func) {
+        return tracked_new<skip_while<T>>(observable, func);
     }
 };
 #endif //OPERATOR_FACTORY_H

@@ -63,6 +63,12 @@ public:
         return pointer;
     }
 
+    abs_observable<T>* skip_while(const std::function<bool(T&)> func) {
+        const auto pointer = operator_factory::make_skip_while<T>(this, func);
+        operator_pointers.push_back(pointer);
+        return pointer;
+    }
+
 protected:
 
     std::vector<abs_observable<T>*> operator_pointers;

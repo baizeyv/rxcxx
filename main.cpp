@@ -81,17 +81,25 @@ int main() {
     // const auto ptr = test.take(2)->subscribe([](const int& val) {
     //     std::cout << val << " ??" << std::endl;
     // });
-    const auto ptr = test.where([](const int& val)->bool {
-        if (val > 5)
+    // const auto ptr = test.where([](const int& val)->bool {
+    //     if (val > 5)
+    //         return true;
+    //     return false;
+    // })->where([](const int& val)->bool {
+    //     return val % 2 == 0;
+    // })->subscribe([](const int& val) {
+    //     std::cout << val << " ??" << std::endl;
+    // });
+    const auto ptr = test.skip_while([](const int& val) -> bool {
+        if (val < 8)
             return true;
         return false;
-    })->where([](const int& val)->bool {
-        return val % 2 == 0;
     })->subscribe([](const int& val) {
         std::cout << val << " ??" << std::endl;
     });
     test = 3;
     test = 5;
+    test = 8;
     test = 7;
     test = 8;
     // ptr->dispose();
