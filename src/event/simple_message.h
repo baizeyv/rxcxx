@@ -7,7 +7,7 @@
 #include "simple_event.hpp"
 #include "../base/unit.h"
 
-class simple_message : public simple_event<unit>{
+class simple_message final : public simple_event<unit>{
 
 };
 #endif //SIMPLE_MESSAGE_H

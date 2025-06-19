@@ -1,6 +1,8 @@
 #include <iostream>
 
-// #include "src/memleak.h"
+#include "src/memleak.h"
+#include "src/event/int_event.hpp"
+#include "src/event/int_message.h"
 #include "src/event/simple_event.hpp"
 #include "src/event/simple_message.h"
 #include "src/variable/reactive_variable.hpp"
@@ -8,10 +10,11 @@
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 int main() {
     // ! 内存泄漏检测
-    // memleak::setup_mem(8192, 0, 0);
-    // memleak::set_leak_detect(true);
+    memleak::setup_mem(8192, 0, 0);
+    memleak::set_leak_detect(true);
     // ###############################################
 
+    /*
     int a = 0;
     reactive_variable<int> test(a);
     // reactive_variable<int> test(5);
@@ -40,4 +43,21 @@ int main() {
         std::cout << val << " ##" << std::endl;
     });
     msg.fire();
+    msg.fire();
+    msg.fire();
+    */
+
+    // int_event<int> iv;
+    // const auto ivPtr = iv.subscribe(1, [](const int& val) {
+    //     std::cout << val << " &&" << std::endl;
+    // });
+    // iv.fire(1, 9);
+    // iv.fire(1, 8);
+
+    int_message im;
+    const auto imPtr = im.subscribe(1, [](const unit& _) {
+        std::cout << "ZZZZ" << std::endl;
+    });
+    im.fire(2);
+    im.fire(1);
 }
