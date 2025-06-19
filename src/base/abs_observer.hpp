@@ -35,8 +35,7 @@ protected:
 
     virtual void on_error_core(std::runtime_error &error) = 0;
 
-    virtual void dispose_core() {
-    }
+    virtual void dispose_core() {}
 
 public:
     /**

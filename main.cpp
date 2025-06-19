@@ -2,10 +2,10 @@
 
 #include "src/memleak.h"
 #include "src/event/int_event.hpp"
-#include "src/event/int_message.h"
-#include "src/event/simple_event.hpp"
-#include "src/event/simple_message.h"
-#include "src/event/string_message.h"
+// #include "src/event/int_message.h"
+// #include "src/event/simple_event.hpp"
+// #include "src/event/simple_message.h"
+// #include "src/event/string_message.h"
 #include "src/variable/reactive_variable.hpp"
 
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -72,4 +72,19 @@ int main() {
     // });
     // sm.fire("ZZ");
     // sm.fire("hello");
+
+    int a = 0;
+    reactive_variable<int> test(a);
+    const auto ptr = test.skip(2)->skip(4)->subscribe([](const int& val) {
+        std::cout << val << " ??" << std::endl;
+    });
+    test = 3;
+    test = 5;
+    test = 7;
+    test = 9;
+    test = 99;
+    test = 88;
+    test = 77;
+    test = 66;
+    // test.dispose();
 }

@@ -15,7 +15,7 @@
  * @tparam U Value Argument
  */
 template<class T,class U>
-class basic_event : public disposable{
+class basic_event : public disposable {
 protected:
     std::unordered_map<T, simple_event<U>> events;
 

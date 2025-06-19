@@ -32,7 +32,7 @@ private:
 
 public:
 
-    ~reactive_variable() {
+    ~reactive_variable() override {
         dispose(false);
     }
 

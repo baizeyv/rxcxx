@@ -7,6 +7,7 @@
 #include "abs_observer.hpp"
 #include "anonymous_observer.hpp"
 #include "disposable.h"
+#include "../operator/operator_factory.h"
 
 /**
  * * 抽象被观察者
@@ -15,6 +16,13 @@
 template<class T>
 class abs_observable {
 public:
+    virtual ~abs_observable() {
+        for (size_t i = 0; i < operator_pointers.size(); ++i) {
+            delete operator_pointers[i];
+        }
+        operator_pointers.clear();
+    }
+
     disposable* subscribe(abs_observer<T> *observer) {
         // ! 这里传入的observer指针是new出来的,需要在合适的时候delete
         try {
@@ -34,7 +42,17 @@ public:
         abs_observer<T>* ptr = static_cast<abs_observer<T>*>(observer);
         return this->subscribe(ptr);
     }
+
+    abs_observable<T>* skip(const int count) {
+        const auto pointer = operator_factory::make_skip<T>(this, count);
+        operator_pointers.push_back(pointer);
+        return pointer;
+    }
+
 protected:
+
+    std::vector<abs_observable<T>*> operator_pointers;
+
     virtual disposable* subscribe_core(abs_observer<T> *observer) = 0;
 };
 #endif //ABS_OBSERVABLE_H

@@ -34,6 +34,7 @@ protected:
     void on_error_core(std::runtime_error &error) override {
         if (on_error)
             on_error(error);
-    };
+    }
+
 };
 #endif //ANONYMOUS_OBSERVER_H

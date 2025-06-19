@@ -36,7 +36,7 @@ public:
         current = T();
     }
 
-    ~simple_event() {
+    ~simple_event() override {
         dispose(false);
     }
 
