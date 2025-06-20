@@ -70,7 +70,7 @@ public:
     }
 protected:
     disposable* subscribe_core(abs_observer<T> *observer) override {
-        auto ob = tracked_new<take_observer<T>>(observer, count);
+        auto ob = TN(take_observer<T>, observer, count);
         // auto ob = new take_observer<T>(observer, count);
         // ! 这里的ob是new出来的,需要在合适的时机delete
         abs_observer<T>* ptr = static_cast<abs_observer<T>*>(ob);

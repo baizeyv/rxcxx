@@ -11,7 +11,7 @@
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 int main() {
     // ! 内存泄漏检测
-    memleak::setup_mem(8192, 0, 0);
+    memleak::setup_mem(81920, 0, 0);
     memleak::set_leak_detect(true);
     // ###############################################
 
@@ -104,7 +104,12 @@ int main() {
     // })->subscribe([](const int& val) {
     //     std::cout << val << " ??" << std::endl;
     // });
-    const auto ptr = test.distinct()->subscribe([](const int& val) {
+    // const auto ptr = test.distinct()->subscribe([](const int& val) {
+    //     std::cout << val << " ??" << std::endl;
+    // });
+    const auto ptr = test.doo([](const int& val) {
+        std::cout << val << " DO" << std::endl;
+    })->subscribe([](const int& val) {
         std::cout << val << " ??" << std::endl;
     });
     test = 3;

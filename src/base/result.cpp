@@ -19,12 +19,12 @@ std::runtime_error& result::get_exception() {
 }
 
 result * result::Success() {
-    return tracked_new<result>();
+    return TN(result);
     // return new result();
 }
 
 result * result::Failure(std::runtime_error exception) {
-    return tracked_new<result>(std::move(exception));
+    return TN(result, std::move(exception));
     // return new result(std::move(exception));
 }
 

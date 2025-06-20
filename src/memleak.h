@@ -10,6 +10,8 @@
 #include<stdexcept>
 #include<mutex>
 
+#include "utils.h"
+
 #define _EXCEPTION_DEF(T,parent) class T:public parent{\
 public:T(const char *msg):parent(msg){}\
 };
@@ -277,6 +279,9 @@ namespace memleak{
 	}
 
     void _showLeakInfo(){
+		printf("╭───────────────╮\n");
+		printf("│ End Detection │\n");
+		printf("╰───────────────╯\n");
         printf("The memory at exit:\n");
         show_mem_info();
         if(_memleak::mem->used==0){
@@ -305,15 +310,16 @@ namespace memleak{
 	void setup_mem(size_t size,size_t mcb_count,unsigned char initVal){
         setup_mem_noinit(size,mcb_count);
 		memset(_memleak::mem->memStart,initVal,size); // 初始化内存
-        std::cout << "-------------------------------" << std::endl;
-        std::cout << "| Begin Malloc Memory Address |" << std::endl;
-        std::cout << "-------------------------------" << std::endl;
+        std::cout << "╭─────────────────────────────╮" << std::endl;
+        std::cout << "│ Start Malloc Memory Address │" << std::endl;
+        std::cout << "╰─────────────────────────────╯" << std::endl;
     }
     void set_leak_detect(bool enabled){ // 设置是否启用退出时打印泄漏信息
         if(_memleak::mem==nullptr)
             throw std::runtime_error("Must call setup_mem() before enabling leak detection");
 
         _memleak::enabled=enabled;
+		tracked::enabled = enabled;
     }
 	void shutdown(){ // 会使得调用enable_leak_detect()之后分配的内存变为无效
 		if(_memleak::mem==nullptr)
@@ -324,6 +330,7 @@ namespace memleak{
 					_memleak::mem->used);
 		delete _memleak::mem;
 		_memleak::enabled=false;
+		tracked::enabled=false;
 		_memleak::mem=nullptr;
 	}
 	}

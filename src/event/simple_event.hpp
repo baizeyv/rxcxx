@@ -173,10 +173,10 @@ protected:
                 observer->on_next(current);
             }
             observer->on_complete(completed_result);
-            return tracked_new<empty_disposable>();
+            return TN(empty_disposable);
             // return new empty_disposable();
         }
-        return tracked_new<observer_node<T>>(this, observer);
+        return TN(observer_node<T>, this, observer);
         // return new observer_node<T>(this, observer);
     }
 };

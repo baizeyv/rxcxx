@@ -45,4 +45,5 @@ add_executable(rxcxx main.cpp
         src/operator/skip_while.h
         src/operator/take_while.h
         src/operator/distinct.h
+        src/operator/do.h
 )

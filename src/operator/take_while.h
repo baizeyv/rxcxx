@@ -56,7 +56,7 @@ public:
     take_while(abs_observable<T>* source, std::function<bool(T&)> predicate) : source(source), predicate(predicate) {}
 protected:
     disposable* subscribe_core(abs_observer<T> *observer) override {
-        auto ob = tracked_new<take_while_observer<T>>(observer, predicate);
+        auto ob = TN(take_while_observer<T>, observer, predicate);
         // auto ob = new take_while_observer<T>(observer, predicate);
         // ! 这里的ob是new出来的,需要在合适的时机delete
         abs_observer<T>* ptr = static_cast<abs_observer<T>*>(ob);
