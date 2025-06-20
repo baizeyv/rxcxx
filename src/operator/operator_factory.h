@@ -11,6 +11,7 @@
 #include "take_while.hpp"
 #include "where.hpp"
 #include "do.hpp"
+#include "scan.hpp"
 #include "select.hpp"
 #include "../utils.h"
 
@@ -20,10 +21,10 @@ private:
     ~operator_factory() = default;
 public:
 
-    static operator_factory* instance() {
-        static operator_factory ins;
-        return &ins;
-    }
+    // static operator_factory* instance() {
+    //     static operator_factory ins;
+    //     return &ins;
+    // }
 
     // # 禁止移动
     operator_factory(const operator_factory&) = delete;
@@ -52,6 +53,11 @@ public:
     template<typename T>
     static where<T> *make_where(abs_observable<T> *observable, std::function<bool(T&)> func) {
         return TN(where<T>, observable, func);
+    }
+
+    template<typename T>
+    static scan<T> *make_scan(abs_observable<T> *observable, std::function<T(T&,T&)> func) {
+        return TN(scan<T>, observable, func);
     }
 
     template<typename T>

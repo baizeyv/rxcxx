@@ -107,16 +107,24 @@ int main() {
     // const auto ptr = test.distinct()->subscribe([](const int& val) {
     //     std::cout << val << " ??" << std::endl;
     // });
-    const auto ptr = test.doo([](const int& val) {
-        std::cout << val << " DO" << std::endl;
-    })->subscribe([](const int& val) {
-        std::cout << val << " ??" << std::endl;
-    });
+    // const auto ptr = test.doo([](const int& val) {
+    //     std::cout << val << " DO" << std::endl;
+    // })->subscribe([](const int& val) {
+    //     std::cout << val << " ??" << std::endl;
+    // });
     // const auto ptr = test.select<float>([](const int& val) -> float {
     //     return 100.0 * val;
-    // })->subscribe([](const float& val) {
+    // })->select<int>([](const float& val)->int {
+    //     return val * 2;
+    // })
+    // ->subscribe([](const int& val) {
     //     std::cout << val << " ff" << std::endl;
     // });
+    const auto ptr = test.scan([](const int& a, const int& b) -> int {
+        return a + b;
+    })->subscribe([](const int& val) {
+        std::cout << val << " ff" << std::endl;
+    });
     test = 3;
     test = 5;
     test = 8;
