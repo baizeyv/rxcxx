@@ -9,7 +9,7 @@
 
 class scope_guard {
 public:
-    scope_guard(std::function<void()> f);
+    explicit scope_guard(std::function<void()> f);
     ~scope_guard();
 private:
     std::function<void()> finally_func;

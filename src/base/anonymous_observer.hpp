@@ -6,24 +6,26 @@
 #define ANONYMOUS_OBSERVER_H
 #include "abs_observer.hpp"
 
+// ! safe completed
+
 template<class T>
 class anonymous_observer final : public abs_observer<T> {
 private:
     std::function<void(T &)> on_next;
     std::function<void(std::runtime_error &)> on_error;
-    std::function<void(result *)> on_complete;
+    std::function<void(std::unique_ptr<result>)> on_complete;
 
 public:
     anonymous_observer(const std::function<void(T &)> on_next,
                        const std::function<void(std::runtime_error &)> &on_error,
-                       const std::function<void(result *)> &on_complete) : on_next(on_next), on_error(on_error),
+                       const std::function<void(std::unique_ptr<result>)> &on_complete) : on_next(on_next), on_error(on_error),
                                                                            on_complete(on_complete) {
     }
 
 protected:
-    void on_complete_core(result *rst) override {
+    void on_complete_core(std::unique_ptr<result> rst) override {
         if (on_complete)
-            on_complete(rst);
+            on_complete(std::move(rst));
     };
 
     void on_next_core(T &p_value) override {

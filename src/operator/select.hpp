@@ -8,30 +8,25 @@
 
 #include "../base/abs_observer.hpp"
 
+// ! safe completed
+
 template<class T>
 class abs_observable;
 
 template<class T, class TR>
-class select_observer final : public abs_observer<T>{
+class select_observer final : public abs_observer<T> {
 private:
-    abs_observer<TR>* observer;
-    std::function<TR(T&)> selector;
+    std::unique_ptr<abs_observer<TR> > observer;
+    std::function<TR(T &)> selector;
 
 public:
-    select_observer(abs_observer<TR>* observer,
-                    std::function<TR(T &)> selector) : observer(observer), selector(selector) {
-    }
-
-    ~select_observer() override {
-        if (observer->is_disposed)
-            return;
-        // delete observer;
-        TD(observer);
+    select_observer(std::unique_ptr<abs_observer<TR> > observer,
+                    std::function<TR(T &)> selector) : observer(std::move(observer)), selector(selector) {
     }
 
 protected:
-    void on_complete_core(result *rst) override {
-        observer->on_complete(rst);
+    void on_complete_core(std::unique_ptr<result> rst) override {
+        observer->on_complete(std::move(rst));
     }
 
     void on_next_core(T &p_value) override {
@@ -42,31 +37,23 @@ protected:
     void on_error_core(std::runtime_error &error) override {
         observer->on_error(error);
     }
-
 };
 
 template<class T, class TR>
-class select final : public abs_observable<TR>, public operator_{
+class select final : public abs_observable<TR> {
 private:
-    abs_observable<T> *source;
+    std::unique_ptr<abs_observable<T> > source;
     std::function<TR(T &)> selector;
 
 public:
-    select(abs_observable<T> *source, std::function<TR(T &)> selector) : source(source), selector(selector) {
+    select(std::unique_ptr<abs_observable<T> > source, std::function<TR(T &)> selector) : source(std::move(source)),
+        selector(selector) {
     }
 
 protected:
-
-    disposable *subscribe_core(abs_observer<TR> *observer) override {
-        using myType = select_observer<T, TR>;
-        auto ob = TN(myType, observer, selector);
-        // ! 这里的ob是new出来的,需要在合适的时机delete
-        abs_observer<T> *ptr = static_cast<abs_observer<T> *>(ob);
-        return source->subscribe(ptr);
-    }
-
-    void release_core() override {
-        TD(this);
+    std::unique_ptr<disposable> subscribe_core(std::unique_ptr<abs_observer<TR> > observer) override {
+        auto ptr = std::make_unique<select_observer<T, TR> >(std::move(observer), selector);
+        return source->subscribe(std::move(ptr));
     }
 };
 

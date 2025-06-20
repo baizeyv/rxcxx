@@ -47,7 +47,6 @@ add_executable(rxcxx main.cpp
         src/operator/distinct.hpp
         src/operator/do.hpp
         src/operator/select.hpp
-        src/operator/operator.h
         src/operator/scan.hpp
         src/operator/aggregate.h
 )

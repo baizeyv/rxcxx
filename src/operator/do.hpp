@@ -12,29 +12,33 @@
 #include "../base/result.h"
 #include "../base/stubs.h"
 
+// ! safe completed
+
 template<class T>
 class abs_observable;
 
 template<class T>
 class do_observer final : public abs_observer<T> {
 private:
-    abs_observer<T>* observer;
+    std::unique_ptr<abs_observer<T> > observer;
     std::function<void(T &)> on_next;
     std::function<void(std::runtime_error &)> on_error;
-    std::function<void(result *)> on_complete;
+    std::function<std::unique_ptr<result>(std::unique_ptr<result>)> on_complete;
+
 public:
-    do_observer(abs_observer<T> *observer, std::function<void(T &)> on_next, std::function<void(std::runtime_error &)> on_error, std::function<void(result *)> on_complete) : observer(observer), on_next(on_next), on_error(std::move(on_error)), on_complete(std::move(on_complete)) {}
-    ~do_observer() override {
-        if (observer->is_disposed)
-            return;
-        // delete observer;
-        TD(observer);
+    do_observer(std::unique_ptr<abs_observer<T> > observer, std::function<void(T &)> on_next,
+                std::function<void(std::runtime_error &)> on_error,
+                std::function<std::unique_ptr<result>(std::unique_ptr<result>)> on_complete) : observer(std::move(
+            observer)),
+        on_next(on_next),
+        on_error(std::move(on_error)),
+        on_complete(std::move(on_complete)) {
     }
 
 protected:
-    void on_complete_core(result *rst) override {
-        on_complete(rst);
-        observer->on_complete(rst);
+    void on_complete_core(std::unique_ptr<result> rst) override {
+        auto ptr = on_complete(std::move(rst));
+        observer->on_complete(std::move(ptr));
     }
 
     void on_next_core(T &p_value) override {
@@ -49,37 +53,41 @@ protected:
 };
 
 template<class T>
-class do_ final : public abs_observable<T>, public operator_ {
+class do_ final : public abs_observable<T> {
 private:
     /**
      * * source 被观察者指针
      */
-    abs_observable<T>* source;
+    std::unique_ptr<abs_observable<T> > source;
 
     std::function<void(T &)> on_next;
     std::function<void(std::runtime_error &)> on_error;
-    std::function<void(result *)> on_complete;
+    std::function<std::unique_ptr<result>(std::unique_ptr<result>)> on_complete;
 
 public:
-    do_(abs_observable<T>* source, std::function<void(T &)> on_next, std::function<void(std::runtime_error &)> on_error, std::function<void(result *)> on_complete) : source(source), on_next(on_next), on_error(std::move(on_error)), on_complete(std::move(on_complete)) {
+    do_(std::unique_ptr<abs_observable<T> > source, std::function<void(T &)> on_next,
+        std::function<void(std::runtime_error &)> on_error,
+        std::function<std::unique_ptr<result>(std::unique_ptr<result>)> on_complete) : source(std::move(source)),
+        on_next(std::move(on_next)),
+        on_error(std::move(on_error)),
+        on_complete(std::move(on_complete)) {
     }
 
-    do_(abs_observable<T>* source, std::function<void(T &)> on_next, std::function<void(result *)> on_complete) : source(source), on_next(on_next), on_error(stubs::unhandled_exception), on_complete(std::move(on_complete)) {
+    do_(std::unique_ptr<abs_observable<T> > source, std::function<void(T &)> on_next,
+        std::function<std::unique_ptr<result>(std::unique_ptr<result>)> on_complete) : source(std::move(source)),
+        on_next(std::move(on_next)),
+        on_error(stubs::unhandled_exception),
+        on_complete(std::move(on_complete)) {
     }
 
-    do_(abs_observable<T>* source, std::function<void(T &)> on_next) : source(source), on_next(on_next), on_error(stubs::unhandled_exception), on_complete(stubs::handle_result) {
+    do_(std::unique_ptr<abs_observable<T> > source, std::function<void(T &)> on_next) : source(std::move(source)),
+        on_next(on_next), on_error(stubs::unhandled_exception), on_complete(stubs::handle_unique_result) {
     }
+
 protected:
-    disposable* subscribe_core(abs_observer<T> *observer) override {
-        auto ob = TN(do_observer<T>, observer, on_next, on_error, on_complete);
-        // auto ob = new do_observer<T>(observer, count);
-        // ! 这里的ob是new出来的,需要在合适的时机delete
-        abs_observer<T>* ptr = static_cast<abs_observer<T>*>(ob);
-        return source->subscribe(ptr);
-    }
-
-    void release_core() override {
-        TD(this);
+    std::unique_ptr<disposable> subscribe_core(std::unique_ptr<abs_observer<T> > observer) override {
+        auto ptr = std::make_unique<do_observer<T> >(std::move(observer), on_next, on_error, on_complete);
+        return source->subscribe(std::move(ptr));
     }
 };
 

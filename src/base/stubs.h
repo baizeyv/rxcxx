@@ -14,6 +14,8 @@ public:
     static std::function<void(std::runtime_error &)> unhandled_exception;
 
     static std::function<void(result *)> handle_result;
+
+    static std::function<std::unique_ptr<result>(std::unique_ptr<result>)> handle_unique_result;
 };
 
 #endif //STUBS_H

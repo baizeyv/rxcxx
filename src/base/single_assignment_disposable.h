@@ -5,8 +5,11 @@
 #ifndef SINGLE_ASSIGNMENT_DISPOSABLE_H
 #define SINGLE_ASSIGNMENT_DISPOSABLE_H
 
+#include <memory>
+
 #include "disposable.h"
 
+// ! safe completed
 
 /**
  * * 只能赋值一次的终结器
@@ -16,7 +19,7 @@ private:
     /**
      * * 当前终结器
      */
-    disposable* current = nullptr;
+    std::unique_ptr<disposable> current = nullptr;
 
     bool is_set = false;
 
@@ -24,7 +27,7 @@ private:
 
 public:
 
-    void set_disposable(disposable* disposable);
+    void set_disposable(std::unique_ptr<disposable> disposable);
 
     void dispose() override;
 };

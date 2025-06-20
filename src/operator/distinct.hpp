@@ -8,26 +8,24 @@
 
 #include "../base/abs_observer.hpp"
 
+// ! safe completed
+
 template<class T>
 class abs_observable;
 
 template<class T>
 class distinct_observer final : public abs_observer<T> {
 private:
-    abs_observer<T>* observer;
+    std::unique_ptr<abs_observer<T>> observer;
     std::unordered_set<T> set;
+
 public:
-    explicit distinct_observer(abs_observer<T>* observer) : observer(observer) {}
-    ~distinct_observer() override {
-        if (observer->is_disposed)
-            return;
-        // delete observer;
-        TD(observer);
+    explicit distinct_observer(std::unique_ptr<abs_observer<T>> observer) : observer(std::move(observer)) {
     }
 
 protected:
-    void on_complete_core(result *rst) override {
-        observer->on_complete(rst);
+    void on_complete_core(std::unique_ptr<result> rst) override {
+        observer->on_complete(std::move(rst));
     }
 
     void on_next_core(T &p_value) override {
@@ -47,26 +45,21 @@ protected:
  * @tparam T
  */
 template<class T>
-class distinct final : public abs_observable<T>, public operator_{
+class distinct final : public abs_observable<T> {
 private:
     /**
      * * source 被观察者指针
      */
-    abs_observable<T>* source;
+    std::unique_ptr<abs_observable<T> > source;
 
 public:
-    explicit distinct(abs_observable<T>* source) : source(source) {}
-protected:
-    disposable* subscribe_core(abs_observer<T> *observer) override {
-        auto ob = TN(distinct_observer<T>,observer);
-        // auto ob = new distinct_observer<T>(observer, count);
-        // ! 这里的ob是new出来的,需要在合适的时机delete
-        abs_observer<T>* ptr = static_cast<abs_observer<T>*>(ob);
-        return source->subscribe(ptr);
+    explicit distinct(std::unique_ptr<abs_observable<T> > source) : source(std::move(source)) {
     }
 
-    void release_core() override {
-        TD(this);
+protected:
+    std::unique_ptr<disposable> subscribe_core(std::unique_ptr<abs_observer<T> > observer) override {
+        auto ptr = std::make_unique<distinct_observer<T> >(std::move(observer));
+        return source->subscribe(std::move(ptr));
     }
 };
 

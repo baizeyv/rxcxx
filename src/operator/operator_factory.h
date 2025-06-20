@@ -34,72 +34,69 @@ public:
     operator_factory& operator=(const operator_factory&) = delete;
 
     template<typename T>
-    static skip<T> *make_skip(abs_observable<T> *observable, const int count) {
+    static std::unique_ptr<skip<T>> make_skip(std::unique_ptr<abs_observable<T>> observable, const int count) {
         if (count >= 0) {
-            return TN(skip<T>, observable, count);
-            // return new skip<T>(observable, count);
+            return std::make_unique<skip<T>>(std::move(observable), count);
         }
         throw std::runtime_error("argument out of range -> count");
     }
 
     template<typename T>
-    static take<T> *make_take(abs_observable<T> *observable, const int count) {
+    static std::unique_ptr<take<T>> make_take(std::unique_ptr<abs_observable<T>> observable, const int count) {
         if (count >= 0) {
-            return TN(take<T>, observable, count);
-            // return new take<T>(observable, count);
+            return std::make_unique<take<T>>(std::move(observable), count);
         }
         throw std::runtime_error("argument out of range -> count");
     }
 
     template<typename T>
-    static where<T> *make_where(abs_observable<T> *observable, std::function<bool(T&)> func) {
-        return TN(where<T>, observable, func);
+    static std::unique_ptr<where<T>> make_where(std::unique_ptr<abs_observable<T>> observable, std::function<bool(T&)> func) {
+        return std::make_unique<where<T>>(std::move(observable), func);
     }
 
     template<typename T>
-    static scan<T> *make_scan(abs_observable<T> *observable, std::function<T(T&,T&)> func) {
-        return TN(scan<T>, observable, func);
+    static std::unique_ptr<scan<T>> make_scan(std::unique_ptr<abs_observable<T>> observable, std::function<T(T&,T&)> func) {
+        return std::make_unique<scan<T>>(std::move(observable), func);
     }
 
     template<typename T>
-    static aggregate<T> *make_aggregate(abs_observable<T> *observable, std::function<T(T&,T&)> func) {
-        return TN(aggregate<T>, observable, func);
+    static std::unique_ptr<aggregate<T>> make_aggregate(std::unique_ptr<abs_observable<T>> observable, std::function<T(T&,T&)> func) {
+        return std::make_unique<aggregate<T>>(std::move(observable), func);
     }
 
     template<typename T>
-    static skip_while<T> *make_skip_while(abs_observable<T> *observable, std::function<bool(T&)> func) {
-        return TN(skip_while<T>, observable, func);
+    static std::unique_ptr<skip_while<T>> make_skip_while(std::unique_ptr<abs_observable<T>> observable, std::function<bool(T&)> func) {
+        return std::make_unique<skip_while<T>>(std::move(observable), func);
     }
 
     template<typename T>
-    static take_while<T> *make_take_while(abs_observable<T> *observable, std::function<bool(T&)> func) {
-        return TN(take_while<T>, observable, func);
+    static std::unique_ptr<take_while<T>> make_take_while(std::unique_ptr<abs_observable<T>> observable, std::function<bool(T&)> func) {
+        return std::make_unique<take_while<T>>(std::move(observable), func);
     }
 
     template<typename T>
-    static distinct<T> *make_distinct(abs_observable<T> *observable) {
-        return TN(distinct<T>, observable);
+    static std::unique_ptr<distinct<T>> make_distinct(std::unique_ptr<abs_observable<T>> observable) {
+        return std::make_unique<distinct<T>>(std::move(observable));
     }
 
     template<typename T, typename TR>
-    static select<T, TR> *make_select(abs_observable<T> *observable, std::function<TR(T&)> func) {
-        using myType = select<T, TR>;
-        return TN(myType, observable, func);
+    static std::unique_ptr<select<T, TR>> make_select(std::unique_ptr<abs_observable<T>> observable, std::function<TR(T&)> func) {
+        return std::make_unique<select<T, TR>>(std::move(observable), func);
     }
 
     template<typename T>
-    static do_<T> *make_do(abs_observable<T> *observable, std::function<void(T &)> on_next, std::function<void(std::runtime_error &)> on_error, std::function<void(result *)> on_complete) {
-        return TN(do_<T>, observable, on_next, on_error, on_complete);
+    static std::unique_ptr<do_<T>> make_do(std::unique_ptr<abs_observable<T>> observable, std::function<void(T &)> on_next, std::function<void(std::runtime_error &)> on_error, std::function<void(std::unique_ptr<result>)> on_complete) {
+        return std::make_unique<do_<T>>(std::move(observable), on_next, on_error, on_complete);
     }
 
     template<typename T>
-    static do_<T> *make_do(abs_observable<T> *observable, std::function<void(T &)> on_next, std::function<void(result *)> on_complete) {
-        return TN(do_<T>, observable, on_next, on_complete);
+    static std::unique_ptr<do_<T>> make_do(std::unique_ptr<abs_observable<T>> observable, std::function<void(T &)> on_next, std::function<void(std::unique_ptr<result>)> on_complete) {
+        return std::make_unique<do_<T>>(std::move(observable), on_next, on_complete);
     }
 
     template<typename T>
-    static do_<T> *make_do(abs_observable<T> *observable, std::function<void(T &)> on_next) {
-        return TN(do_<T>, observable, on_next);
+    static std::unique_ptr<do_<T>> make_do(std::unique_ptr<abs_observable<T>> observable, std::function<void(T &)> on_next) {
+        return std::make_unique<do_<T>>(std::move(observable), on_next);
     }
 };
 #endif //OPERATOR_FACTORY_H

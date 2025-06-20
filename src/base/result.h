@@ -6,6 +6,7 @@
 #define RESULT_H
 #include <stdexcept>
 #include <iostream>
+#include <memory>
 
 
 struct result {
@@ -21,9 +22,9 @@ public:
 
     std::runtime_error& get_exception() ;
 
-    static result *Success();
+    static std::unique_ptr<result> Success();
 
-    static result *Failure(std::runtime_error exception);
+    static std::unique_ptr<result> Failure(std::runtime_error exception);
 
 };
 

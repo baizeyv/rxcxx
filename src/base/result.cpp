@@ -18,14 +18,12 @@ std::runtime_error& result::get_exception() {
     return exception;
 }
 
-result * result::Success() {
-    return TN(result);
-    // return new result();
+std::unique_ptr<result>  result::Success() {
+    return std::make_unique<result>();
 }
 
-result * result::Failure(std::runtime_error exception) {
-    return TN(result, std::move(exception));
-    // return new result(std::move(exception));
+std::unique_ptr<result>  result::Failure(std::runtime_error exception) {
+    return std::make_unique<result>(std::move(exception));
 }
 
 std::ostream &operator<<(std::ostream &os, result &r) {

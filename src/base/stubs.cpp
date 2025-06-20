@@ -23,3 +23,13 @@ std::function<void(result *)> stubs::handle_result = [](result *rst) {
     TD(rst);
 };
 
+std::function<std::unique_ptr<result>(std::unique_ptr<result>)> stubs::handle_unique_result = [
+        ](std::unique_ptr<result> rst) -> std::unique_ptr<result> {
+    if (!rst)
+        return rst;
+    if (!rst->is_success) {
+        auto ex = rst->get_exception();
+        unhandled_exception(ex);
+    }
+    return std::move(rst);
+};

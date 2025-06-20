@@ -4,7 +4,8 @@
 
 #ifndef SKIP_H
 #define SKIP_H
-#include "../utils.h"
+
+// ! safe completed
 
 template<class T>
 class abs_observable;
@@ -12,23 +13,16 @@ class abs_observable;
 template<class T>
 class skip_observer final : public abs_observer<T> {
 private:
-    abs_observer<T>* observer;
+    std::unique_ptr<abs_observer<T>> observer;
     int count;
 
 public:
-    skip_observer(abs_observer<T>* observer, const int count) : observer(observer), count(count) {
-    }
-
-    ~skip_observer() override {
-        if (observer->is_disposed)
-            return;
-        // delete observer;
-        TD(observer);
+    skip_observer(std::unique_ptr<abs_observer<T>> observer, const int count) : observer(std::move(observer)), count(count) {
     }
 
 protected:
 
-    void on_complete_core(result *rst) override {
+    void on_complete_core(std::unique_ptr<result> rst) override {
         observer->on_complete(rst);
     }
 
@@ -51,12 +45,12 @@ protected:
  * @tparam T
  */
 template <class T>
-class skip final : public abs_observable<T>, public operator_ {
+class skip final : public abs_observable<T> {
 private:
     /**
      * * source 被观察者指针
      */
-    abs_observable<T>* source;
+    std::unique_ptr<abs_observable<T>> source;
 
     /**
      * * 需要跳过的数量
@@ -64,21 +58,15 @@ private:
     int count;
 
 public:
-    skip(abs_observable<T>* source, const int count) : source(source), count(count) {
+    skip(std::unique_ptr<abs_observable<T>> source, const int count) : source(std::move(source)), count(count) {
 
     }
 
 protected:
-    disposable* subscribe_core(abs_observer<T> *observer) override {
-        auto ob = TN(skip_observer<T>, observer, count);
-        // auto ob = new skip_observer<T>(observer, count);
-        // ! 这里的ob是new出来的,需要在合适的时机delete
-        abs_observer<T>* ptr = static_cast<abs_observer<T>*>(ob);
-        return source->subscribe(ptr);
+    std::unique_ptr<disposable> subscribe_core(std::unique_ptr<abs_observer<T>> observer) override {
+        auto ptr = std::make_unique<skip_observer<T>>(std::move(observer), count);
+        return source->subscribe(std::move(ptr));
     }
 
-    void release_core() override {
-        TD(this);
-    }
 };
 #endif //SKIP_H

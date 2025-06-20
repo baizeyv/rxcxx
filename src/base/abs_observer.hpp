@@ -25,17 +25,13 @@ public:
      */
     single_assignment_disposable source_subscription;
 
-    /**
-     * * 来源操作符
-     */
-    std::function<void()> source_operator_func;
 protected:
 
     virtual bool auto_dispose_on_complete() {
         return true;
     }
 
-    virtual void on_complete_core(result *rst) = 0;
+    virtual void on_complete_core(std::unique_ptr<result> rst) = 0;
 
     virtual void on_next_core(T &p_value) = 0;
 
@@ -49,7 +45,7 @@ public:
      */
     bool is_disposed = false;
 
-    void on_complete(result *rst) {
+    void on_complete(std::unique_ptr<result> rst) {
         if (is_called_on_complete)
             return;
         is_called_on_complete = true;
@@ -57,11 +53,11 @@ public:
             return;
         bool disposeOnFinally = auto_dispose_on_complete();
         scope_guard sg([this, &disposeOnFinally]() {
-            if (disposeOnFinally && !is_disposed)
+            if (disposeOnFinally)
                 dispose();
         });
         try {
-            on_complete_core(rst);
+            on_complete_core(std::move(rst));
         } catch (std::runtime_error &e) {
             disposeOnFinally = true;
             stubs::unhandled_exception(e);
@@ -109,21 +105,9 @@ public:
         if (is_disposed)
             return;
         is_disposed = true;
-        if (source_operator_func) {
-            source_operator_func();
-            source_operator_func = nullptr;
-        }
         dispose_core();
         source_subscription.dispose();
-        TD(this);
-        // delete this;
     }
 
-    ~abs_observer() override {
-        if (source_operator_func) {
-            source_operator_func();
-            source_operator_func = nullptr;
-        }
-    }
 };
 #endif //ABS_OBSERVER_H
