@@ -4,13 +4,13 @@
 
 #ifndef OPERATOR_FACTORY_H
 #define OPERATOR_FACTORY_H
-#include "distinct.h"
+#include "distinct.hpp"
 #include "skip.hpp"
-#include "skip_while.h"
+#include "skip_while.hpp"
 #include "take.hpp"
-#include "take_while.h"
+#include "take_while.hpp"
 #include "where.hpp"
-#include "do.h"
+#include "do.hpp"
 #include "../utils.h"
 
 class operator_factory final {
