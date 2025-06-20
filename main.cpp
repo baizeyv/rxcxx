@@ -120,7 +120,12 @@ int main() {
     // ->subscribe([](const int& val) {
     //     std::cout << val << " ff" << std::endl;
     // });
-    const auto ptr = test.scan([](const int& a, const int& b) -> int {
+    // const auto ptr = test.scan([](const int& a, const int& b) -> int {
+    //     return a + b;
+    // })->subscribe([](const int& val) {
+    //     std::cout << val << " ff" << std::endl;
+    // });
+    const auto ptr = test.aggregate([](const int& a, const int& b) -> int {
         return a + b;
     })->subscribe([](const int& val) {
         std::cout << val << " ff" << std::endl;
@@ -133,6 +138,7 @@ int main() {
     // ptr->dispose();
     test = 9;
     test = 4;
+    // test.dispose();
     // ptr->dispose();
     // test = 5;
     // test = 7;

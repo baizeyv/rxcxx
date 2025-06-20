@@ -77,6 +77,12 @@ public:
         return pointer;
     }
 
+    abs_observable<T> *aggregate(const std::function<T(T&,T&)> func) {
+        const auto pointer = operator_factory::make_aggregate<T>(this, func);
+        operator_pointers.push_back(static_cast<operator_*>(pointer));
+        return pointer;
+    }
+
     abs_observable<T> *skip_while(const std::function<bool(T &)> func) {
         const auto pointer = operator_factory::make_skip_while<T>(this, func);
         operator_pointers.push_back(static_cast<operator_*>(pointer));

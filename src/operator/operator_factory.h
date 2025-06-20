@@ -4,6 +4,7 @@
 
 #ifndef OPERATOR_FACTORY_H
 #define OPERATOR_FACTORY_H
+#include "aggregate.h"
 #include "distinct.hpp"
 #include "skip.hpp"
 #include "skip_while.hpp"
@@ -58,6 +59,11 @@ public:
     template<typename T>
     static scan<T> *make_scan(abs_observable<T> *observable, std::function<T(T&,T&)> func) {
         return TN(scan<T>, observable, func);
+    }
+
+    template<typename T>
+    static aggregate<T> *make_aggregate(abs_observable<T> *observable, std::function<T(T&,T&)> func) {
+        return TN(aggregate<T>, observable, func);
     }
 
     template<typename T>

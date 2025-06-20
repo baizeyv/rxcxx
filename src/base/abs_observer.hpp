@@ -57,7 +57,7 @@ public:
             return;
         bool disposeOnFinally = auto_dispose_on_complete();
         scope_guard sg([this, &disposeOnFinally]() {
-            if (disposeOnFinally)
+            if (disposeOnFinally && !is_disposed)
                 dispose();
         });
         try {
@@ -109,12 +109,12 @@ public:
         if (is_disposed)
             return;
         is_disposed = true;
-        dispose_core();
-        source_subscription.dispose();
         if (source_operator_func) {
             source_operator_func();
             source_operator_func = nullptr;
         }
+        dispose_core();
+        source_subscription.dispose();
         TD(this);
         // delete this;
     }
