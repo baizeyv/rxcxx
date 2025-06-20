@@ -24,6 +24,11 @@ public:
      * * 订阅来源
      */
     single_assignment_disposable source_subscription;
+
+    /**
+     * * 来源操作符
+     */
+    std::function<void()> source_operator_func;
 protected:
 
     virtual bool auto_dispose_on_complete() {
@@ -106,8 +111,19 @@ public:
         is_disposed = true;
         dispose_core();
         source_subscription.dispose();
+        if (source_operator_func) {
+            source_operator_func();
+            source_operator_func = nullptr;
+        }
         TD(this);
         // delete this;
+    }
+
+    ~abs_observer() override {
+        if (source_operator_func) {
+            source_operator_func();
+            source_operator_func = nullptr;
+        }
     }
 };
 #endif //ABS_OBSERVER_H

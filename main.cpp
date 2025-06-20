@@ -112,6 +112,11 @@ int main() {
     })->subscribe([](const int& val) {
         std::cout << val << " ??" << std::endl;
     });
+    // const auto ptr = test.select<float>([](const int& val) -> float {
+    //     return 100.0 * val;
+    // })->subscribe([](const float& val) {
+    //     std::cout << val << " ff" << std::endl;
+    // });
     test = 3;
     test = 5;
     test = 8;
