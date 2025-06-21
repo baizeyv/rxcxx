@@ -4,7 +4,6 @@
 
 #ifndef AGGREGATE_H
 #define AGGREGATE_H
-#include "operator.h"
 #include "../base/abs_observer.hpp"
 
 // ! safe completed

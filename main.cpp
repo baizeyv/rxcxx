@@ -78,9 +78,9 @@ int main() {
     // const auto ptr = test.skip(2)->skip(4)->subscribe([](const int& val) {
     //     std::cout << val << " ??" << std::endl;
     // });
-    // const auto ptr = test.take(2)->subscribe([](const int& val) {
-    //     std::cout << val << " ??" << std::endl;
-    // });
+    const auto ptr = test.take(2)->subscribe([](const int& val) {
+        std::cout << val << " ??" << std::endl;
+    });
     // const auto ptr = test.where([](const int& val)->bool {
     //     if (val > 5)
     //         return true;
@@ -125,11 +125,11 @@ int main() {
     // })->subscribe([](const int& val) {
     //     std::cout << val << " ff" << std::endl;
     // });
-    const auto ptr = test.aggregate([](const int& a, const int& b) -> int {
-        return a + b;
-    })->subscribe([](const int& val) {
-        std::cout << val << " ff" << std::endl;
-    });
+    // const auto ptr = test.aggregate([](const int& a, const int& b) -> int {
+    //     return a + b;
+    // })->subscribe([](const int& val) {
+    //     std::cout << val << " ff" << std::endl;
+    // });
     test = 3;
     test = 5;
     test = 8;

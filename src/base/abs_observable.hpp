@@ -37,64 +37,76 @@ public:
     }
 
     std::unique_ptr<abs_observable<T>> skip(const int count) {
-        const auto pointer = operator_factory::make_skip<T>(this, count);
+        auto wrapper = operator_factory::make_wrapper(this);
+        const auto pointer = operator_factory::make_skip<T>(std::move(wrapper), count);
         return pointer;
     }
 
-    abs_observable<T> *take(const int count) {
-        const auto pointer = operator_factory::make_take<T>(this, count);
+    std::unique_ptr<abs_observable<T>> take(const int count) {
+        auto wrapper = operator_factory::make_wrapper(this);
+        const auto pointer = operator_factory::make_take<T>(std::move(wrapper), count);
+        return std::move(pointer);
+    }
+
+    std::unique_ptr<abs_observable<T>> where(const std::function<bool(T &)> func) {
+        auto wrapper = operator_factory::make_wrapper(this);
+        const auto pointer = operator_factory::make_where<T>(std::move(wrapper), func);
         return pointer;
     }
 
-    abs_observable<T> *where(const std::function<bool(T &)> func) {
-        const auto pointer = operator_factory::make_where<T>(this, func);
+    std::unique_ptr<abs_observable<T>> scan(const std::function<T(T&,T&)> func) {
+        auto wrapper = operator_factory::make_wrapper(this);
+        const auto pointer = operator_factory::make_scan<T>(std::move(wrapper), func);
         return pointer;
     }
 
-    abs_observable<T> *scan(const std::function<T(T&,T&)> func) {
-        const auto pointer = operator_factory::make_scan<T>(this, func);
+    std::unique_ptr<abs_observable<T>> aggregate(const std::function<T(T&,T&)> func) {
+        auto wrapper = operator_factory::make_wrapper(this);
+        const auto pointer = operator_factory::make_aggregate<T>(std::move(wrapper), func);
         return pointer;
     }
 
-    abs_observable<T> *aggregate(const std::function<T(T&,T&)> func) {
-        const auto pointer = operator_factory::make_aggregate<T>(this, func);
+    std::unique_ptr<abs_observable<T>> skip_while(const std::function<bool(T &)> func) {
+        auto wrapper = operator_factory::make_wrapper(this);
+        const auto pointer = operator_factory::make_skip_while<T>(std::move(wrapper), func);
         return pointer;
     }
 
-    abs_observable<T> *skip_while(const std::function<bool(T &)> func) {
-        const auto pointer = operator_factory::make_skip_while<T>(this, func);
+    std::unique_ptr<abs_observable<T>> take_while(const std::function<bool(T &)> func) {
+        auto wrapper = operator_factory::make_wrapper(this);
+        const auto pointer = operator_factory::make_take_while<T>(std::move(wrapper), func);
         return pointer;
     }
 
-    abs_observable<T> *take_while(const std::function<bool(T &)> func) {
-        const auto pointer = operator_factory::make_take_while<T>(this, func);
+    std::unique_ptr<abs_observable<T>> distinct() {
+        auto wrapper = operator_factory::make_wrapper(this);
+        const auto pointer = operator_factory::make_distinct<T>(std::move(wrapper));
         return pointer;
     }
 
-    abs_observable<T> *distinct() {
-        const auto pointer = operator_factory::make_distinct<T>(this);
-        return pointer;
-    }
-
-    abs_observable<T> *doo(std::function<void(T &)> on_next, const std::function<void(std::runtime_error &)> &on_error,
+    std::unique_ptr<abs_observable<T>> doo(std::function<void(T &)> on_next, const std::function<void(std::runtime_error &)> &on_error,
                            const std::function<void(result *)> &on_complete) {
-        const auto pointer = operator_factory::make_do<T>(this, on_next, on_error, on_complete);
+        auto wrapper = operator_factory::make_wrapper(this);
+        const auto pointer = operator_factory::make_do<T>(std::move(wrapper), on_next, on_error, on_complete);
         return pointer;
     }
 
-    abs_observable<T> *doo(std::function<void(T &)> on_next, const std::function<void(result *)> &on_complete) {
-        const auto pointer = operator_factory::make_do<T>(this, on_next, on_complete);
+    std::unique_ptr<abs_observable<T>> doo(std::function<void(T &)> on_next, const std::function<void(result *)> &on_complete) {
+        auto wrapper = operator_factory::make_wrapper(this);
+        const auto pointer = operator_factory::make_do<T>(std::move(wrapper), on_next, on_complete);
         return pointer;
     }
 
-    abs_observable<T> *doo(std::function<void(T &)> on_next) {
-        const auto pointer = operator_factory::make_do<T>(this, on_next);
+    std::unique_ptr<abs_observable<T>> doo(std::function<void(T &)> on_next) {
+        auto wrapper = operator_factory::make_wrapper(this);
+        const auto pointer = operator_factory::make_do<T>(std::move(wrapper), on_next);
         return pointer;
     }
 
     template<typename TR>
-    abs_observable<TR> *select(std::function<TR(T &)> func) {
-        const auto pointer = operator_factory::make_select<T, TR>(this, func);
+    std::unique_ptr<abs_observable<TR>> select(std::function<TR(T &)> func) {
+        auto wrapper = operator_factory::make_wrapper(this);
+        const auto pointer = operator_factory::make_select<T, TR>(std::move(wrapper), func);
         return pointer;
     }
 

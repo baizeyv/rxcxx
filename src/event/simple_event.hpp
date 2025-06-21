@@ -104,7 +104,7 @@ public:
         }
     }
 
-    void on_complete(result* rst) override {
+    void on_complete(std::unique_ptr<result> rst) override {
         throw_if_disposed();
         if (is_completed())
             return;
@@ -123,7 +123,7 @@ public:
             last = node->previous;
         }
         while (node != nullptr) {
-            node->observer->on_complete(rst);
+            node->observer->on_complete(std::move(rst));
             if (node == last)
                 return;
             auto tmp = node;
@@ -161,10 +161,10 @@ public:
 
 protected:
 
-    disposable *subscribe_core(abs_observer<T> *observer) override {
+    std::unique_ptr<disposable> subscribe_core(std::unique_ptr<abs_observer<T>> observer) override {
         // ! 这里传入的observer指针是new出来的,需要在合适的时候delete
         throw_if_disposed();
-        result *completed_result = nullptr;
+        std::unique_ptr<result> completed_result = nullptr;
         if (is_completed()) {
             completed_result = error.what() == "" ? result::Success() : result::Failure(error);
         }
@@ -172,11 +172,14 @@ protected:
             if (completed_result->is_success) {
                 observer->on_next(current);
             }
-            observer->on_complete(completed_result);
-            return TN(empty_disposable);
+            observer->on_complete(std::move(completed_result));
+            return std::make_unique<empty_disposable>();
             // return new empty_disposable();
         }
-        return TN(observer_node<T>, this, observer);
+        // TODO:
+            return std::make_unique<empty_disposable>();
+        // return std::make_unique<observer_node<T>>(this, observer);
+        // return TN(observer_node<T>, this, observer);
         // return new observer_node<T>(this, observer);
     }
 };

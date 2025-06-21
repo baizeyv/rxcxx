@@ -15,6 +15,7 @@
 #include "scan.hpp"
 #include "select.hpp"
 #include "../utils.h"
+#include "../factories/observable_wrapper.h"
 
 class operator_factory final {
 private:
@@ -34,6 +35,11 @@ public:
     operator_factory& operator=(const operator_factory&) = delete;
 
     template<typename T>
+    static std::unique_ptr<observable_wrapper<T>> make_wrapper(abs_observable<T>* observable) {
+        return std::make_unique<observable_wrapper<T>>(observable);
+    }
+
+    template<typename T>
     static std::unique_ptr<skip<T>> make_skip(std::unique_ptr<abs_observable<T>> observable, const int count) {
         if (count >= 0) {
             return std::make_unique<skip<T>>(std::move(observable), count);
@@ -42,7 +48,7 @@ public:
     }
 
     template<typename T>
-    static std::unique_ptr<take<T>> make_take(std::unique_ptr<abs_observable<T>> observable, const int count) {
+    static std::unique_ptr<abs_observable<T>> make_take(std::unique_ptr<abs_observable<T>> observable, const int count) {
         if (count >= 0) {
             return std::make_unique<take<T>>(std::move(observable), count);
         }

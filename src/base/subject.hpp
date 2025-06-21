@@ -18,7 +18,7 @@ class subject {
 public:
     virtual void on_next(T& value) = 0;
     virtual void on_error(std::runtime_error &error) = 0;
-    virtual void on_complete(result* rst) = 0;
+    virtual void on_complete(std::unique_ptr<result> rst) = 0;
 };
 
 #endif //SUBJECT_H

@@ -6,7 +6,6 @@
 #define SCAN_H
 #include <functional>
 
-#include "operator.h"
 #include "../base/abs_observer.hpp"
 
 // ! safe completed
