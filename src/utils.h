@@ -34,4 +34,21 @@ void tracked_delete(T* ptr, const char* file, int line) {
 #define TN(T, ...) tracked_new<T>(__FILE__, __LINE__, ##__VA_ARGS__)
 #define TD(ptr) tracked_delete(ptr, __FILE__, __LINE__)
 
+namespace rxcxx
+{
+    namespace util
+    {
+        template<class T>
+        using decay_t = typename std::decay<T>::type;
+
+        using error_ptr = std::exception_ptr;
+        
+        // If called during exception handling, return the currently caught exception.
+        // Otherwise return null.
+        inline error_ptr current_exception() {
+            return std::current_exception();
+        }
+    }
+}
+
 #endif //UTILS_H
