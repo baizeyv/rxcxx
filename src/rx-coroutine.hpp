@@ -15,7 +15,7 @@
 #if !defined(RXCPP_RX_COROUTINE_HPP)
 #define RXCPP_RX_COROUTINE_HPP
 
-#include "rx-includes.hpp"
+#include "../rxcpp/rx-includes.hpp"
 
 #ifdef _RESUMABLE_FUNCTIONS_SUPPORTED
 

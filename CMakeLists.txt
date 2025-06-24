@@ -4,6 +4,8 @@ project(rxcxx)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(rxcxx main.cpp
-        src/observer.hpp
-        src/predef.hpp
+        src/rxcxx.h
+        src/extra/reactive_variable.hpp
+        src/extra/simple_event.hpp
+        src/extra/simple_message.h
 )
