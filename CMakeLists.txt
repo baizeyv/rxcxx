@@ -8,4 +8,6 @@ add_executable(rxcxx main.cpp
         src/extra/reactive_variable.hpp
         src/extra/simple_event.hpp
         src/extra/simple_message.h
+        src/extra/int_message.h
+        neo/rxcxx-observable.hpp
 )
