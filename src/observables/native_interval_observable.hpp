@@ -12,18 +12,23 @@
 #include "../schedules/default_scheduler_impl.h"
 
 namespace rxcxx::observables {
-    template<typename T = int>
-    auto interval(std::chrono::milliseconds msec,
-                  scheduler::creator_func sccr = schedulers::default_scheduler()) noexcept
+    template<typename T>
+    auto native_interval(std::chrono::milliseconds msec,
+                         std::function<bool(const T &)> end_cond = [](const T &) { return false; },
+                         scheduler::creator_func sccr = schedulers::default_scheduler()) noexcept
         -> observable<T> {
-        return observable<>::make_observable<T>([msec, sccr](observer<T> s) {
+        return observable<>::make_observable<T>([msec, sccr, end_cond](observer<T> s) {
             auto scdl = sccr();
-            scdl.schedule([s, msec, scdl]() {
-                T n = 1;
-                while (s.is_subscribed()) {
+            scdl.schedule([s, msec, scdl, end_cond]() {
+                std::shared_ptr<T> n = std::make_shared<T>();
+                while (s.is_no_disposed()) {
                     std::this_thread::sleep_for(msec);
-                    s.on_next(n);
-                    n++;
+                    s.on_next(*n);
+                    ++(*n);
+                    if (end_cond(*n)) {
+                        s.on_completed();
+                        break;
+                    }
                 }
                 scdl.abort();
             });

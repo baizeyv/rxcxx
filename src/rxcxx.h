@@ -12,7 +12,10 @@
 #include "observables/error_observable.hpp"
 #include "observables/just_observable.hpp"
 #include "observables/never_observable.hpp"
+#include "observables/iterate_observable.hpp"
+#include "observables/defer_observable.hpp"
 #include "observables/native_interval_observable.hpp"
+#include "observables/blocking_observables.hpp"
 // * ╭───────────╮
 // * │ OPERATORS │
 #include "operators/subscribe_operator.hpp"
@@ -38,6 +41,7 @@
 #include "operators/native_delay_operator.hpp"
 #include "operators/merge_operator.hpp"
 #include "operators/amb_operator.hpp"
+#include "operators/blocking_operator.hpp"
 // * ╰───────────╯
 
 #include "schedules/default_scheduler_impl.h"

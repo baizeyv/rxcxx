@@ -53,4 +53,8 @@ add_executable(rxcxx main.cpp
         src/operators/merge_operator.hpp
         src/operators/amb_operator.hpp
         src/observables/native_interval_observable.hpp
+        src/observables/iterate_observable.hpp
+        src/observables/defer_observable.hpp
+        src/observables/blocking_observables.hpp
+        src/operators/blocking_operator.hpp
 )

@@ -85,28 +85,46 @@ int main() {
     c >> subscribe([](const auto &val) {
         std::cout << val << "C" << std::endl;
     });
-    c >> tap([](const auto& val) {
+    c >> tap([](const auto &val) {
         std::cout << val << " TAP" << std::endl;
     }) >> subscribe([](const auto &val) {
         std::cout << val << "D" << std::endl;
     });
     test.as_subscriber().on_next(100);
     // 打印当前线程ID
-    auto print_thread = [](const std::string& context) {
+    auto print_thread = [](const std::string &context) {
         std::cout << context << " on thread: "
-                  << std::this_thread::get_id() << std::endl;
+                << std::this_thread::get_id() << std::endl;
     };
     print_thread("A");
     // range(1, 10) >>  observe_on(new_thread_scheduler()) >> subscribe([](const auto &val) {
     //     std::cout << val << " TCH " << std::this_thread::get_id() << std::endl;
     // });
 
-    range(1, 2) >> subscribe_on(new_thread_scheduler()) >> tap([&](int) {
-        print_thread("B");
-    }) >> observe_on(new_thread_scheduler()) >> tap([&](int) {
-        print_thread("Z");
-    }) >> subscribe([&](const auto& val) {
-        print_thread("C");
-    });
-    std::this_thread::sleep_for(std::chrono::seconds(2));
+    // range(1, 2) >> subscribe_on(new_thread_scheduler()) >> tap([&](int) {
+    //     print_thread("B");
+    // }) >> observe_on(new_thread_scheduler()) >> tap([&](int) {
+    //     print_thread("Z");
+    // }) >> subscribe([&](const auto& val) {
+    //     print_thread("C");
+    // });
+    // std::this_thread::sleep_for(std::chrono::seconds(2));
+
+    // native_interval<int>(std::chrono::milliseconds(100), [](const int &val) {
+    //             return val >= 20;
+    //         }) >> subscribe_on(new_thread_scheduler()) >> tap([&](const auto &val) {
+    //             print_thread("C");
+    //             std::cout << "ZZ " << val << std::endl;
+    //         })
+    //         >> operators::blocking() >>
+    //         subscribe([&](const auto &val) {
+    //             print_thread("B");
+    //             std::cout << "<<<<<<<<< " << val << std::endl;
+    //         });
+
+    // native_interval<int>(std::chrono::milliseconds(500), [](const int& val) {
+    //     return val>=20;
+    // }) >> subscribe_on(new_thread_scheduler()) >> subscribe([](const auto& val) {
+    //     std::cout << "<<<<<<<<< " << val << std::endl;
+    // });
 }
