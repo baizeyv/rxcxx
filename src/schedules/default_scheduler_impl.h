@@ -24,7 +24,7 @@ namespace rxcxx::schedulers {
     };
 
     inline auto default_scheduler() noexcept {
-        return [] {
+        return []() {
             return scheduler(std::make_shared<default_scheduler_impl>());
         };
     }

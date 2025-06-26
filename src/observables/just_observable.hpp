@@ -11,7 +11,7 @@
 
 namespace rxcxx::observables {
     template<typename T>
-    inline auto just(T &&value, scheduler::creator_func sccr = rxcxx::schedulers::default_scheduler()) noexcept
+    inline auto just(T &&value, scheduler::creator_func sccr = schedulers::default_scheduler()) noexcept
         -> observable<typename strip_const_ref<T>::type> {
         using TT = typename strip_const_ref<T>::type;
         auto v = std::make_shared<TT>(std::forward<T>(value));

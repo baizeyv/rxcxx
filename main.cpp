@@ -1,13 +1,14 @@
 #include <iostream>
 
 #include "memleak.h"
+#include "another/subjects/behavior.h"
 #include "src/rxcxx.h"
 
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 int main() {
     // ! 内存泄漏检测
-    memleak::setup_mem(81920, 0, 0);
-    memleak::set_leak_detect(true);
+    // memleak::setup_mem(81920, 0, 0);
+    // memleak::set_leak_detect(true);
     // ###############################################
     // (rxcxx::observables::range(2, 9) >> rxcxx::operators::take(3)).subscribe([](auto &val) {
     //     std::cout << val << std::endl;
@@ -37,7 +38,75 @@ int main() {
     //     std::cout << val << std::endl;
     // });
 
-    range(2, 10) >> skip(2) >> subscribe([](const auto &val) {
-        std::cout << val << std::endl;
+    // range(2, 10) >> skip(2) >> subscribe([](const auto &val) {
+    //     std::cout << val << std::endl;
+    // });
+
+    // const behavior<int> test(2);
+    // auto c = test.as_observable() >> publish();
+    // c >> subscribe([](const auto &val) {
+    //     std::cout << val << std::endl;
+    // });
+    // test.as_subscriber().on_next(3);
+    // test.as_subscriber().on_next(4);
+    // test.as_subscriber().on_next(4);
+    // test.as_subscriber().on_next(5);
+    // auto z = c.connect();
+
+    // replay<int> test(3);
+    // auto c = test.as_observable();
+    // test.as_subscriber().on_next(20);
+    // c >> subscribe([](const auto &val) {
+    //     std::cout << val << "A" << std::endl;
+    // });
+    // test.as_subscriber().on_next(40);
+    // c >> subscribe([](const auto &val) {
+    //     std::cout << val << "B" << std::endl;
+    // });
+    // test.as_subscriber().on_next(60);
+
+    behavior<int> test(3);
+    auto c = test.as_observable();
+    test.as_subscriber().on_next(20);
+
+    auto afn = [](const auto &val) {
+        std::cout << val << "A" << std::endl;
+    };
+    c >> subscribe(afn);
+    test.as_subscriber().on_next(40);
+
+    auto bfn = [](const auto &val) {
+        std::cout << val << "B" << std::endl;
+    };
+    c >> subscribe(bfn);
+    test.as_subscriber().on_next(60);
+
+    test.as_subscriber().on_next(80);
+    c >> subscribe([](const auto &val) {
+        std::cout << val << "C" << std::endl;
     });
+    c >> tap([](const auto& val) {
+        std::cout << val << " TAP" << std::endl;
+    }) >> subscribe([](const auto &val) {
+        std::cout << val << "D" << std::endl;
+    });
+    test.as_subscriber().on_next(100);
+    // 打印当前线程ID
+    auto print_thread = [](const std::string& context) {
+        std::cout << context << " on thread: "
+                  << std::this_thread::get_id() << std::endl;
+    };
+    print_thread("A");
+    // range(1, 10) >>  observe_on(new_thread_scheduler()) >> subscribe([](const auto &val) {
+    //     std::cout << val << " TCH " << std::this_thread::get_id() << std::endl;
+    // });
+
+    range(1, 2) >> subscribe_on(new_thread_scheduler()) >> tap([&](int) {
+        print_thread("B");
+    }) >> observe_on(new_thread_scheduler()) >> tap([&](int) {
+        print_thread("Z");
+    }) >> subscribe([&](const auto& val) {
+        print_thread("C");
+    });
+    std::this_thread::sleep_for(std::chrono::seconds(2));
 }

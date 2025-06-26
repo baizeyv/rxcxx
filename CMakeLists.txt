@@ -38,4 +38,19 @@ add_executable(rxcxx main.cpp
         src/operators/skip_while_operator.hpp
         src/operators/skip_operator.hpp
         src/operators/distinct_until_changed_operator.hpp
+        src/observables/connectable_observable.hpp
+        src/subjects/subject.hpp
+        src/operators/on_error_resume_next_operator.hpp
+        src/operators/publish_operator.hpp
+        src/subjects/behavior.hpp
+        src/subjects/replay.hpp
+        src/operators/tap_operator.hpp
+        src/operators/skip_until_operator.hpp
+        src/operators/subscribe_on_operator.hpp
+        src/operators/observe_on_operator.hpp
+        src/operators/retry_operator.hpp
+        src/operators/native_delay_operator.hpp
+        src/operators/merge_operator.hpp
+        src/operators/amb_operator.hpp
+        src/observables/native_interval_observable.hpp
 )

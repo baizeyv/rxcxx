@@ -5,9 +5,11 @@
 #ifndef SCHEDULER_H
 #define SCHEDULER_H
 #include <condition_variable>
+#include <iostream>
 #include <memory>
 #include <mutex>
 #include <queue>
+#include <bits/ostream.tcc>
 
 #include "scheduler_interface.h"
 
@@ -57,8 +59,6 @@ namespace rxcxx {
                         }
                     }
                 });
-            } else {
-                mem->interface->run({});
             }
         }
 
