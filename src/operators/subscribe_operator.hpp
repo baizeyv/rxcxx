@@ -5,7 +5,6 @@
 #ifndef SUBSCRIBE_OPERATOR_HPP
 #define SUBSCRIBE_OPERATOR_HPP
 #include "../observer.hpp"
-#include "../rxcxx-utils.h"
 
 namespace rxcxx::operators {
     template<typename T>

@@ -55,6 +55,11 @@
 #include "subjects/replay.hpp"
 
 #include "extra/rx_variable.hpp"
+#include "extra/msg_set.hpp"
+#include "extra/specific/int_msg.hpp"
+#include "extra/specific/string_msg.hpp"
+#include "extra/specific/int_evt.hpp"
+#include "extra/specific/string_msg.hpp"
 
 namespace rx {
     using namespace rxcxx;
@@ -63,6 +68,7 @@ namespace rx {
     using namespace rxcxx::operators;
     using namespace rxcxx::subjects;
     using namespace rxcxx::extra;
+    using namespace rxcxx::extra::specific;
 }
 using namespace rx;
 #endif //RXCXX_H

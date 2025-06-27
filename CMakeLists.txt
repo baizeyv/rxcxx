@@ -61,4 +61,13 @@ add_executable(rxcxx main.cpp
         src/operators/zip_operator.hpp
         src/operators/timeout_operator.hpp
         src/extra/rx_variable.hpp
+        src/extra/rx_event.hpp
+        src/extra/rx_message.hpp
+        src/extra/unit.h
+        src/extra/specific/int_msg.hpp
+        src/extra/msg_set.hpp
+        src/extra/evt_set.hpp
+        src/extra/specific/int_evt.hpp
+        src/extra/specific/string_msg.hpp
+        src/extra/specific/string_evt.hpp
 )

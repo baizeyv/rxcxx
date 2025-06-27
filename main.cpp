@@ -2,6 +2,9 @@
 
 #include "memleak.h"
 #include "src/rxcxx.h"
+#include "src/extra/rx_event.hpp"
+#include "src/extra/rx_message.hpp"
+#include "src/extra/specific/int_evt.hpp"
 
 // TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 int main() {
@@ -132,14 +135,51 @@ int main() {
     //     print_thread("T");
     // });
 
-    rx_variable<int> test(5);
-    test >> subscribe([](const auto& val) {
-        std::cout << "V: " << val << std::endl;
+    // rx_variable<int> test(5);
+    // test >> subscribe([](const auto& val) {
+    //     std::cout << "V: " << val << std::endl;
+    // });
+    // test = 3;
+    // test = 4;
+    // test = 4;
+    // test.dispose();
+    // test = 4;
+    // test = 2;
+
+    // rx_event<int> evt;
+    // evt >> subscribe([](const auto& val) {
+    //     std::cout << "EVT: " << val << std::endl;
+    // });
+    // evt = 3;
+    // evt = 3;
+    // evt.dispose();
+    // evt = 5;
+
+    // const rx_message msg;
+    // msg >> subscribe([](auto) {
+    //     std::cout << "???" << std::endl;
+    // });
+    // msg();
+    // msg();
+    // msg();
+
+    // int_msg msg;
+    // msg[1] >> subscribe([](auto) {
+    //     std::cout << "ZZZZZ" << std::endl;
+    // });
+    // msg(1);
+    // msg(2);
+    // msg(1);
+
+    int_evt<int> evt;
+    evt[1] >> subscribe([](const auto& val) {
+        std::cout << val << std::endl;
     });
-    test = 3;
-    test = 4;
-    test = 4;
-    test.dispose();
-    test = 4;
-    test = 2;
+    evt[2] >> subscribe([](const auto& val) {
+        std::cout << val << ".." << std::endl;
+    });
+    evt(1, 2);
+    evt(1, 3);
+    evt(2, 3);
+    evt(1, 5);
 }
