@@ -59,10 +59,11 @@ namespace rxcxx::observables {
         mutable std::exception_ptr error_;
         mutable bool subscribed_;
         mutable bool completed_;
+        mutable bool first_;
         mutable std::mutex mtx;
         mutable std::condition_variable cv;
 
-        blocking(observable<value_type> src) noexcept : src_(src), error_(nullptr), subscribed_(false), completed_(false) {
+        blocking(observable<value_type> src) noexcept : src_(src), error_(nullptr), subscribed_(false), completed_(false), first_(false) {
         }
 
         void subscribe_all() const {
@@ -70,16 +71,20 @@ namespace rxcxx::observables {
             subscribed_ = true;
             src_.subscribe(
                 [&](const value_type &x) {
+                    std::lock_guard<std::mutex> lock(mtx);
                     queue_.push_back(x);
-                    cv.notify_all();
+                    first_ = true;
+                    cv.notify_one();
                 },
                 [&](std::exception_ptr err) {
+                    std::lock_guard<std::mutex> lock(mtx);
                     error_ = err;
-                    cv.notify_all();
+                    cv.notify_one();
                 },
                 [&] {
+                    std::lock_guard<std::mutex> lock(mtx);
                     completed_ = true;
-                    cv.notify_all();
+                    cv.notify_one();
                 }
             );
         }
@@ -112,7 +117,7 @@ namespace rxcxx::observables {
             std::unique_lock lock(mtx);
             subscribe_all();
             cv.wait(lock, [this] {
-                return error_ || completed_;
+                return first_;
             });
             if (queue_.empty()) {
                 if (error_) {

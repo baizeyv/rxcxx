@@ -122,9 +122,14 @@ int main() {
     //             std::cout << "<<<<<<<<< " << val << std::endl;
     //         });
 
-    // native_interval<int>(std::chrono::milliseconds(500), [](const int& val) {
-    //     return val>=20;
-    // }) >> subscribe_on(new_thread_scheduler()) >> subscribe([](const auto& val) {
-    //     std::cout << "<<<<<<<<< " << val << std::endl;
-    // });
+    native_interval<int>(std::chrono::milliseconds(500), [](const int& val) {
+        return val>=5;
+    }) >> subscribe_on(new_thread_scheduler()) >> tap([&](const auto& val) {
+        print_thread("Z");
+    }) >> observe_on(new_thread_scheduler()) >> tap([&](const auto& val) {
+        print_thread("A");
+    }) >> block() >> subscribe([&](const auto& val) {
+        print_thread("T");
+    });
+    // std::this_thread::sleep_for(std::chrono::seconds(2));
 }
