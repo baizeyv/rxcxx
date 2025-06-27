@@ -54,12 +54,15 @@
 #include "subjects/behavior.hpp"
 #include "subjects/replay.hpp"
 
+#include "extra/rx_variable.hpp"
+
 namespace rx {
     using namespace rxcxx;
     using namespace rxcxx::schedulers;
     using namespace rxcxx::observables;
     using namespace rxcxx::operators;
     using namespace rxcxx::subjects;
+    using namespace rxcxx::extra;
 }
 using namespace rx;
 #endif //RXCXX_H

@@ -64,38 +64,39 @@ int main() {
     // });
     // test.as_subscriber().on_next(60);
 
-    behavior<int> test(3);
-    auto c = test.as_observable();
-    test.as_subscriber().on_next(20);
+    // behavior<int> test(3);
+    // auto c = test.as_observable();
+    // test.as_subscriber().on_next(20);
+    //
+    // auto afn = [](const auto &val) {
+    //     std::cout << val << "A" << std::endl;
+    // };
+    // c >> subscribe(afn);
+    // test.as_subscriber().on_next(40);
+    //
+    // auto bfn = [](const auto &val) {
+    //     std::cout << val << "B" << std::endl;
+    // };
+    // c >> subscribe(bfn);
+    // test.as_subscriber().on_next(60);
+    //
+    // test.as_subscriber().on_next(80);
+    // c >> subscribe([](const auto &val) {
+    //     std::cout << val << "C" << std::endl;
+    // });
+    // c >> tap([](const auto &val) {
+    //     std::cout << val << " TAP" << std::endl;
+    // }) >> subscribe([](const auto &val) {
+    //     std::cout << val << "D" << std::endl;
+    // });
+    // test.as_subscriber().on_next(100);
+    // // 打印当前线程ID
+    // auto print_thread = [](const std::string &context) {
+    //     std::cout << context << " on thread: "
+    //             << std::this_thread::get_id() << std::endl;
+    // };
+    // print_thread("A");
 
-    auto afn = [](const auto &val) {
-        std::cout << val << "A" << std::endl;
-    };
-    c >> subscribe(afn);
-    test.as_subscriber().on_next(40);
-
-    auto bfn = [](const auto &val) {
-        std::cout << val << "B" << std::endl;
-    };
-    c >> subscribe(bfn);
-    test.as_subscriber().on_next(60);
-
-    test.as_subscriber().on_next(80);
-    c >> subscribe([](const auto &val) {
-        std::cout << val << "C" << std::endl;
-    });
-    c >> tap([](const auto &val) {
-        std::cout << val << " TAP" << std::endl;
-    }) >> subscribe([](const auto &val) {
-        std::cout << val << "D" << std::endl;
-    });
-    test.as_subscriber().on_next(100);
-    // 打印当前线程ID
-    auto print_thread = [](const std::string &context) {
-        std::cout << context << " on thread: "
-                << std::this_thread::get_id() << std::endl;
-    };
-    print_thread("A");
     // range(1, 10) >>  observe_on(new_thread_scheduler()) >> subscribe([](const auto &val) {
     //     std::cout << val << " TCH " << std::this_thread::get_id() << std::endl;
     // });
@@ -121,14 +122,24 @@ int main() {
     //             std::cout << "<<<<<<<<< " << val << std::endl;
     //         });
 
-    native_interval<int>(std::chrono::milliseconds(500), [](const int& val) {
-        return val>=5;
-    }) >> subscribe_on(new_thread_scheduler()) >> tap([&](const auto& val) {
-        print_thread("Z");
-    }) >> observe_on(new_thread_scheduler()) >> tap([&](const auto& val) {
-        print_thread("A");
-    }) >> block() >> subscribe([&](const auto& val) {
-        print_thread("T");
+    // native_interval<int>(std::chrono::milliseconds(500), [](const int& val) {
+    //     return val>=5;
+    // }) >> subscribe_on(new_thread_scheduler()) >> tap([&](const auto& val) {
+    //     print_thread("Z");
+    // }) >> observe_on(new_thread_scheduler()) >> tap([&](const auto& val) {
+    //     print_thread("A");
+    // }) >> block() >> subscribe([&](const auto& val) {
+    //     print_thread("T");
+    // });
+
+    rx_variable<int> test(5);
+    test >> subscribe([](const auto& val) {
+        std::cout << "V: " << val << std::endl;
     });
-    // std::this_thread::sleep_for(std::chrono::seconds(2));
+    test = 3;
+    test = 4;
+    test = 4;
+    test.dispose();
+    test = 4;
+    test = 2;
 }
