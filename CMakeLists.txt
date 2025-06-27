@@ -60,4 +60,5 @@ add_executable(rxcxx main.cpp
         src/operators/select_many_operator.hpp
         src/operators/zip_operator.hpp
         src/operators/timeout_operator.hpp
+        src/extra/rx_variable.hpp
 )
