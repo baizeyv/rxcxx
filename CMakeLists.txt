@@ -57,4 +57,7 @@ add_executable(rxcxx main.cpp
         src/observables/defer_observable.hpp
         src/observables/blocking_observables.hpp
         src/operators/blocking_operator.hpp
+        src/operators/select_many_operator.hpp
+        src/operators/zip_operator.hpp
+        src/operators/timeout_operator.hpp
 )

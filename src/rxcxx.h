@@ -27,6 +27,7 @@
 #include "operators/first_operator.hpp"
 #include "operators/where_operator.hpp"
 #include "operators/select_operator.hpp"
+#include "operators/select_many_operator.hpp"
 #include "operators/finally_operator.hpp"
 #include "operators/skip_operator.hpp"
 #include "operators/skip_until_operator.hpp"
@@ -42,6 +43,8 @@
 #include "operators/merge_operator.hpp"
 #include "operators/amb_operator.hpp"
 #include "operators/blocking_operator.hpp"
+#include "operators/timeout_operator.hpp"
+#include "operators/zip_operator.hpp"
 // * ╰───────────╯
 
 #include "schedules/default_scheduler_impl.h"
