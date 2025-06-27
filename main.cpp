@@ -172,7 +172,9 @@ int main() {
     // msg(1);
 
     int_evt<int> evt;
-    evt[1] >> subscribe([](const auto& val) {
+    evt[1] >> where([](const auto& val) {
+        return val % 2 != 0;
+    }) >> subscribe([](const auto& val) {
         std::cout << val << std::endl;
     });
     evt[2] >> subscribe([](const auto& val) {

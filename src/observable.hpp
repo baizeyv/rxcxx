@@ -40,7 +40,6 @@ namespace rxcxx {
             );
         }
 
-        // TODO: INC
     };
 
     template<class T>
@@ -98,12 +97,8 @@ namespace rxcxx {
             return *this;
         }
 
-        // TODO: operators INC
-
     };
 
-
-    // TODO: INC
 }
 
 #endif //OBSERVABLE_HPP
